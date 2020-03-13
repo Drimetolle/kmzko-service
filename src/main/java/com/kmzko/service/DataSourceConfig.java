@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import javax.sql.DataSource;
 
 @Configuration
-//@EnableJpaRepositories
+@EnableJpaRepositories
 @PropertySource("classpath:jdbc.properties")
 public class DataSourceConfig {
     @Autowired
