@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/questionnaire")
+@CrossOrigin(origins = "*")
 public class QuestionnaireController {
     @Autowired
     private GenerateQuestionnaire factoryQuestionnaire;
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<String>> getListOfConveyorType() {
         List<ConveyorType> types = Arrays.asList(ConveyorType.values());
@@ -26,7 +26,6 @@ public class QuestionnaireController {
         return ResponseEntity.ok(result);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{rawType}", produces = "application/json")
     public ResponseEntity<Questionnaire> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
         ConveyorType type = ConveyorType.saveValueOf(rawType);

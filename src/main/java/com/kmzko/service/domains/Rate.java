@@ -24,8 +24,10 @@ public class Rate {
         this.value = value;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "rate_id", nullable = false)
-    @JsonIgnore
-    private Questionnaire questionnaire;
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    @JoinColumn(name = "questionnaire_id", nullable = false)
+//    @ManyToOne
+//    @JoinColumn(name="questionnaire_id", nullable=false)
+//    @JsonIgnore
+//    private Questionnaire questionnaire;
 }

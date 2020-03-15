@@ -35,21 +35,16 @@ public class RepoIntegrationTests {
 
     @Test
     public void checkOneInsertToQuestionnaireRepo() throws Exception {
-        Questionnaire res = new Questionnaire();
-        res.setName("quest");
-        res.setType(ConveyorType.TAPE.toString());
-
-        List<Questionnaire> listQ = new ArrayList(Arrays.asList(new Questionnaire[]{res}));
-
         Rate rate1 = new Rate("wqe1", "ggsd1");
-        rate1.setQuestionnaire(res);
         Rate rate2 = new Rate("wqe2", "ggsd2");
-        rate2.setQuestionnaire(res);
         Rate rate3 = new Rate("wqe3", "ggsd3");
-        rate3.setQuestionnaire(res);
         List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{rate1, rate2, rate3}));
 
-        rateRepo.saveAll(list);
+        Questionnaire res = new Questionnaire();
+        res.setName("quest");
+        res.setRateList(list);
+        res.setType(ConveyorType.TAPE.toString());
+
         questionnaireRepo.save(res);
 
         List<Questionnaire> questionnaireList = questionnaireRepo.findByType(ConveyorType.TAPE.toString());

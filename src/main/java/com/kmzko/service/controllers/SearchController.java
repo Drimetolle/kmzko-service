@@ -11,11 +11,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/search")
+@CrossOrigin(origins = "*")
 public class SearchController {
     @Autowired
     private SearchService service;
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Conveyor>> getListOfConveyorType() {
         List<Conveyor> conveyors = service.getNearConveyors();

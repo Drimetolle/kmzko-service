@@ -6,20 +6,15 @@ import com.kmzko.service.domains.Rate;
 import com.kmzko.service.repositories.QuestionnaireRepo;
 import com.kmzko.service.repositories.RateRepo;
 import org.assertj.core.util.Arrays;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +48,19 @@ public class QuestionnaireControllerIntegrationTests {
 
     @Test
     public void testReturnValue() throws Exception {
+        Rate rate1 = new Rate("wqe1", "");
+        Rate rate2 = new Rate("wqe2", "");
+        Rate rate3 = new Rate("wqe3", "");
+        List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{rate1, rate2, rate3}));
+
         Questionnaire res = new Questionnaire();
         res.setName("quest");
+        res.setRateList(list);
         res.setType(ConveyorType.TAPE.toString());
 
         List<Questionnaire> listQ = new ArrayList(Arrays.asList(new Questionnaire[]{res}));
 
-        Rate rate1 = new Rate("wqe1", "");
-        rate1.setQuestionnaire(res);
-        Rate rate2 = new Rate("wqe2", "");
-        rate2.setQuestionnaire(res);
-        Rate rate3 = new Rate("wqe3", "");
-        rate3.setQuestionnaire(res);
-        List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{rate1, rate2, rate3}));
 
-        rateRepo.saveAll(list);
         questionnaireRepo.save(res);
 
         mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire/tape"))
