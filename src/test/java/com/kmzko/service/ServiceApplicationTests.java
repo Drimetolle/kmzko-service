@@ -3,10 +3,8 @@ package com.kmzko.service;
 import com.kmzko.service.domains.ConveyorType;
 import com.kmzko.service.domains.Questionnaire;
 import com.kmzko.service.domains.Rate;
-import com.kmzko.service.repositories.QuestionnaireRepo;
 import com.kmzko.service.services.GenerateQuestionnaire;
 import org.assertj.core.util.Arrays;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -28,10 +26,10 @@ class ServiceApplicationTests {
     void contextLoads() {
         List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{new Rate(), new Rate(), new Rate()}));
         Questionnaire res = new Questionnaire(list, ConveyorType.TAPE.toString());
-        Mockito.when(generateQuestionnaire.sad(any())).thenReturn(res);
+        Mockito.when(generateQuestionnaire.getLastRevisionQuestionnaire(any())).thenReturn(res);
 
-        assertThat(generateQuestionnaire.sad(ConveyorType.TAPE)).isNotNull();
-        assertThat(generateQuestionnaire.sad(ConveyorType.TAPE)).isEqualTo(res);
+        assertThat(generateQuestionnaire.getLastRevisionQuestionnaire(ConveyorType.TAPE)).isNotNull();
+        assertThat(generateQuestionnaire.getLastRevisionQuestionnaire(ConveyorType.TAPE)).isEqualTo(res);
     }
 
 }

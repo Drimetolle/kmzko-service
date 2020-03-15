@@ -1,8 +1,7 @@
 package com.kmzko.service.controllers;
 
 import com.kmzko.service.domains.Questionnaire;
-import com.kmzko.service.repositories.QuestionnaireRepo;
-import org.springframework.dao.EmptyResultDataAccessException;
+import com.kmzko.service.utils.QuestionnaireDeployer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,16 +13,17 @@ import java.net.URI;
 @RequestMapping("/api/deploy")
 @CrossOrigin(origins = "*")
 public class DeployController {
-    private final QuestionnaireRepo questionnaireRepo;
+    private final QuestionnaireDeployer questionnaireDeployer;
 
-    public DeployController(QuestionnaireRepo questionnaireRepo) {
-        this.questionnaireRepo = questionnaireRepo;
+    public DeployController(QuestionnaireDeployer questionnaireDeployer) {
+        this.questionnaireDeployer = questionnaireDeployer;
     }
+
 
     @PostMapping(value = "/questionnaire")
     public ResponseEntity<Questionnaire> deployNewQuestionnaire(HttpServletRequest request,
                                                                 @Valid @RequestBody Questionnaire body) {
-        Questionnaire newBody = questionnaireRepo.save(body);
+        Questionnaire newBody = questionnaireDeployer.save(body);
         return ResponseEntity.created(URI.create(
                 String.format("http://%s%s%s", request.getLocalName(), "/api/questionnaire/", newBody.getId())))
                 .body(newBody);
@@ -31,12 +31,8 @@ public class DeployController {
 
     @DeleteMapping(value = "/questionnaire/{id}")
     public ResponseEntity<Void> deleteQuestionnaire(@PathVariable long id) {
-        try {
-            questionnaireRepo.deleteById(id);
-        }
-        catch (EmptyResultDataAccessException ex) {
+        if (!questionnaireDeployer.deleteById(id))
             return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().build();
     }
 }

@@ -108,7 +108,7 @@ public class DeployControllerIntegrationTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(res)))
                 .andDo(print())
-                .andExpect(header().string("Location", "http://localhost/api/questionnaire/1"))
+                .andExpect(header().string("Location", "http://localhost/api/questionnaire/"))
                 .andExpect(status().isCreated());
 
         assertThat(questionnaireRepo.count()).isEqualTo(1);

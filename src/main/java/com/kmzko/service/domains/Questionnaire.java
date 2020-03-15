@@ -21,11 +21,9 @@ public class Questionnaire {
     private String type;
     @CreationTimestamp
     private Date utilDate;
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "questionnaire", cascade = CascadeType.ALL)
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="questionnaire")
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rate> rateList;
-
 
     public Questionnaire() {
         this.rateList = new ArrayList<>();

@@ -1,6 +1,5 @@
 package com.kmzko.service.domains.conveyor;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

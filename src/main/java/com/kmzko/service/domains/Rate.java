@@ -1,6 +1,5 @@
 package com.kmzko.service.domains;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,11 +22,4 @@ public class Rate {
         this.name = name;
         this.value = value;
     }
-
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    @JoinColumn(name = "questionnaire_id", nullable = false)
-//    @ManyToOne
-//    @JoinColumn(name="questionnaire_id", nullable=false)
-//    @JsonIgnore
-//    private Questionnaire questionnaire;
 }

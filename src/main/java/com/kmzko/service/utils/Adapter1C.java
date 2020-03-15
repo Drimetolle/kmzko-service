@@ -1,19 +1,21 @@
 package com.kmzko.service.utils;
 
-import com.kmzko.service.domains.conveyor.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kmzko.service.domains.conveyor.Conveyor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class Adapter1C implements AdapterAPI {
-    @Autowired
-    private Request1CAPI api;
+    private final Request1CAPI api;
+    private final ConveyorFactory factory;
 
-    @Autowired
-    private ConveyorFactory factory;
+    public Adapter1C(Request1CAPI api, ConveyorFactory factory) {
+        this.api = api;
+        this.factory = factory;
+    }
 
     @Override
     public List<Conveyor> getNearConveyors() {

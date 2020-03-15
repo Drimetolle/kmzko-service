@@ -3,23 +3,17 @@ package com.kmzko.service.services;
 import com.kmzko.service.domains.ConveyorType;
 import com.kmzko.service.domains.Questionnaire;
 import com.kmzko.service.repositories.QuestionnaireRepo;
-import com.kmzko.service.repositories.RateRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class GenerateQuestionnaire {
-    @Autowired
-    private QuestionnaireRepo repository;
+    private final QuestionnaireRepo repository;
 
-    @Autowired
-    RateRepo rateRepo;
+    public GenerateQuestionnaire(QuestionnaireRepo repository) {
+        this.repository = repository;
+    }
 
-    public Questionnaire sad(ConveyorType type) {
-        List<Questionnaire> questionnaireList = repository.findByType(type.toString());
-        Questionnaire questionnaire = repository.findLatestRecord("TAPE");
-        return questionnaire;
+    public Questionnaire getLastRevisionQuestionnaire(ConveyorType type) {
+        return repository.findLatestRecord(type.getValue());
     }
 }

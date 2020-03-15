@@ -28,13 +28,13 @@ public class QuestionnaireController {
 
     @GetMapping(value = "/{rawType}", produces = "application/json")
     public ResponseEntity<Questionnaire> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
-        ConveyorType type = ConveyorType.saveValueOf(rawType);
+        ConveyorType type = ConveyorType.safeValueOf(rawType);
 
         if (type == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        Questionnaire questionnaire = factoryQuestionnaire.sad(type);
+        Questionnaire questionnaire = factoryQuestionnaire.getLastRevisionQuestionnaire(type);
 
         return ResponseEntity.ok(questionnaire);
     }

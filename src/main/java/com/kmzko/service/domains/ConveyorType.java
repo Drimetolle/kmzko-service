@@ -17,7 +17,7 @@ public enum ConveyorType {
         return view;
     }
 
-    public static ConveyorType saveValueOf(String value) {
+    public static ConveyorType safeValueOf(String value) {
         for(ConveyorType v : values())
             if(v.toString().equalsIgnoreCase(value)) return v;
         return null;
