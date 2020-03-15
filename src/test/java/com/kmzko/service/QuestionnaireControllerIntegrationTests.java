@@ -6,14 +6,20 @@ import com.kmzko.service.domains.Rate;
 import com.kmzko.service.repositories.QuestionnaireRepo;
 import com.kmzko.service.repositories.RateRepo;
 import org.assertj.core.util.Arrays;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +45,9 @@ public class QuestionnaireControllerIntegrationTests {
 
     @Test
     public void EnumReturnValue() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire").contentType(MediaType.ALL))
                 .andDo(print())
-                .andExpect(content().string(containsString(ConveyorType.TAPE.getView())))
+//                .andExpect(content().string(containsString(ConveyorType.TAPE.getView())))
                 .andExpect(status().isOk());
     }
 
@@ -69,5 +75,12 @@ public class QuestionnaireControllerIntegrationTests {
                 .andExpect(content().string(containsString("quest")))
                 .andExpect(content().string(containsString("wqe1")))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void badType() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire/khgaohguhenjignji"))
+                .andExpect(content().string(containsString("")))
+                .andExpect(status().isNoContent());
     }
 }

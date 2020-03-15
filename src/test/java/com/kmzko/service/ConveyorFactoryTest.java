@@ -5,6 +5,8 @@ import com.kmzko.service.domains.conveyor.Kilogram;
 import com.kmzko.service.utils.ConveyorFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.assertj.core.api.Assertions.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,7 +23,7 @@ public class ConveyorFactoryTest {
     private ConveyorFactory factory;
 
     @Test
-    public void as() {
+    public void defaultBehavior() {
         Map<String, Object> result = new HashMap<>();
 
         Map<String, Object> node = new HashMap<>();
@@ -44,5 +46,15 @@ public class ConveyorFactoryTest {
         result.put("name", "Конвейер1");
 
         Conveyor conveyor = factory.createByMap(result);
+
+        assertThat(conveyor).isNotNull();
+        assertThat(conveyor.getName()).isEqualTo("Конвейер1");
+        assertThat(conveyor.getNodes().size()).isEqualTo(1);
+        assertThat(conveyor.getNodes().get(0).getName()).isEqualTo("node1");
+        assertThat(conveyor.getNodes().get(0).getDetails().size()).isEqualTo(1);
+        assertThat(conveyor.getNodes().get(0).getDetails().get(0).getName()).isEqualTo("detail1");
+        assertThat(conveyor.getNodes().get(0).getDetails().get(0).getCharacteristics().size()).isEqualTo(1);
+        assertThat(conveyor.getNodes().get(0).getDetails().get(0).getCharacteristics().get(0).getUnit().getValue()).isEqualTo(123);
     }
+
 }
