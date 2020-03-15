@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -20,9 +21,12 @@ public class DeployController {
     }
 
     @PostMapping(value = "/questionnaire")
-    public ResponseEntity<Questionnaire> deployNewQuestionnaire(@Valid @RequestBody Questionnaire body) {
+    public ResponseEntity<Questionnaire> deployNewQuestionnaire(HttpServletRequest request,
+                                                                @Valid @RequestBody Questionnaire body) {
         Questionnaire newBody = questionnaireRepo.save(body);
-        return ResponseEntity.created(URI.create("")).body(newBody);
+        return ResponseEntity.created(URI.create(
+                String.format("http://%s%s%s", request.getLocalName(), "/api/questionnaire/", newBody.getId())))
+                .body(newBody);
     }
 
     @DeleteMapping(value = "/questionnaire/{id}")
