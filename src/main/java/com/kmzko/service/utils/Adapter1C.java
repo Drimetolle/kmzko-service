@@ -2,10 +2,12 @@ package com.kmzko.service.utils;
 
 import com.kmzko.service.domains.conveyor.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class Adapter1C implements AdapterAPI {
     @Autowired
     private Request1CAPI api;

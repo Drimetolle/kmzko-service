@@ -4,11 +4,9 @@ import com.kmzko.service.domains.ConveyorType;
 import com.kmzko.service.domains.Questionnaire;
 import com.kmzko.service.services.GenerateQuestionnaire;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +18,7 @@ public class QuestionnaireController {
     @Autowired
     private GenerateQuestionnaire factoryQuestionnaire;
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<String>> getListOfConveyorType() {
         List<ConveyorType> types = Arrays.asList(ConveyorType.values());
@@ -27,9 +26,14 @@ public class QuestionnaireController {
         return ResponseEntity.ok(result);
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{rawType}", produces = "application/json")
     public ResponseEntity<Questionnaire> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
-        ConveyorType type = ConveyorType.valueOf(rawType.toUpperCase());
+        ConveyorType type = ConveyorType.saveValueOf(rawType);
+
+        if (type == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
 
         Questionnaire questionnaire = factoryQuestionnaire.sad(type);
 

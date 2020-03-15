@@ -1,13 +1,12 @@
 package com.kmzko.service.controllers;
 
+import com.kmzko.service.domains.conveyor.Conveyor;
 import com.kmzko.service.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,9 +15,10 @@ public class SearchController {
     @Autowired
     private SearchService service;
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(produces = "application/json")
-    public ResponseEntity<String> getListOfConveyorType(@RequestBody Map<String, String> body) {
-        service.getNearConveyors(body);
-        return ResponseEntity.ok("");
+    public ResponseEntity<List<Conveyor>> getListOfConveyorType() {
+        List<Conveyor> conveyors = service.getNearConveyors();
+        return ResponseEntity.ok(conveyors);
     }
 }

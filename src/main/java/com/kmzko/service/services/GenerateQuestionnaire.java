@@ -19,6 +19,7 @@ public class GenerateQuestionnaire {
 
     public Questionnaire sad(ConveyorType type) {
         List<Questionnaire> questionnaireList = repository.findByType(type.toString());
-        return questionnaireList.get(questionnaireList.size() - 1);
+        Questionnaire questionnaire = repository.findLatestRecord("TAPE");
+        return questionnaire;
     }
 }

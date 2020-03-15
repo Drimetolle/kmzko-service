@@ -1,6 +1,7 @@
 package com.kmzko.service.utils;
 
 import com.kmzko.service.domains.conveyor.*;
+import com.kmzko.service.exeption.NotValidConveyorMapException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,12 +10,21 @@ import java.util.stream.Collectors;
 @Service
 public class ConveyorFactory {
     public void createTemplateConveyor() {
-
+        /* TODO */
     }
 
-    public Conveyor createByMap(Map<String, Object> rawConveyor) {
+    public Conveyor createByMap(Map<String, Object> rawConveyor) throws NotValidConveyorMapException {
         Conveyor tmp = createConveyor(rawConveyor);
+
+        if (tmp.getNodes() == null) {
+            throw new NotValidConveyorMapException("parse error");
+        }
+
         return tmp;
+    }
+
+    public boolean validMap(Map<String, Object> rawConveyor) {
+        return createConveyor(rawConveyor).getNodes() != null;
     }
 
     private Conveyor createConveyor(Map<String, Object> rawConveyor) {
