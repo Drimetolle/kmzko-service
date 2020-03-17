@@ -1,5 +1,6 @@
 package com.kmzko.service.utils;
 
+import com.kmzko.service.domains.Rate;
 import com.kmzko.service.domains.conveyor.Conveyor;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,16 @@ public class Adapter1C implements AdapterAPI {
     }
 
     @Override
-    public List<Conveyor> getNearConveyors() {
-        List<Map<String, Object>> response = api.getNearConveyors();
+    public List<Conveyor> getNearConveyors(List<Rate> rates) {
+        Map<String, Object> map = rates.stream()
+                .collect(Collectors.toMap(Rate::getName, Rate::getValue));
+        List<Map<String, Object>> response = api.getNearConveyors(map);
         return constructConveyorList(response);
+    }
+
+    @Override
+    public Conveyor getConveyorById(long id) {
+        return constructConveyor(api.getConveyorById(id));
     }
 
     private List<Conveyor> constructConveyorList(List<Map<String, Object>> rawConveyors) {

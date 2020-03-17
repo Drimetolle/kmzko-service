@@ -1,5 +1,6 @@
 package com.kmzko.service.services;
 
+import com.kmzko.service.domains.Rate;
 import com.kmzko.service.domains.conveyor.Conveyor;
 import com.kmzko.service.utils.AdapterAPI;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,12 @@ public class KmzkoService {
         this.adapter = adapter;
     }
 
-    public List<Conveyor> getNearConveyors() {
-        return adapter.getNearConveyors();
+    public List<Conveyor> getNearConveyors(List<Rate> rates) {
+        return adapter.getNearConveyors(rates);
     }
+
+    public Conveyor getConveyorById(long id) {
+        return adapter.getConveyorById(id);
+    }
+
 }

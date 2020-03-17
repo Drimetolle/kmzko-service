@@ -16,8 +16,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/questionnaire")
 @CrossOrigin(origins = "*")
 public class QuestionnaireController {
-    @Autowired
-    private GenerateQuestionnaire factoryQuestionnaire;
+    private final GenerateQuestionnaire factoryQuestionnaire;
+
+    public QuestionnaireController(GenerateQuestionnaire factoryQuestionnaire) {
+        this.factoryQuestionnaire = factoryQuestionnaire;
+    }
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<String>> getListOfConveyorType() {
