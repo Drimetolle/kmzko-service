@@ -1,7 +1,9 @@
 package com.kmzko.service.utils;
 
+import com.kmzko.service.domains.conveyor.Node;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -10,10 +12,10 @@ public class Request1CAPI {
         Map<String, Object> result = new HashMap<>();
 
         Map<String, Object> node = new HashMap<>();
-        List<Map<String, Object>> nodes = Arrays.asList(node);
+        List<Map<String, Object>> nodes = Arrays.asList(node, node, node);
 
         Map<String, Object> detail = new HashMap<>();
-        List<Map<String, Object>> details = Arrays.asList(detail);
+        List<Map<String, Object>> details = Arrays.asList(detail, detail, detail, detail);
 
         Map<String, Object> characteristic = new HashMap<>();
         List<Map<String, Object>> characteristics = Arrays.asList(characteristic);
