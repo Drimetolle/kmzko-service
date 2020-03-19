@@ -17,17 +17,19 @@ public class Characteristic {
     private long id;
     private String name;
     private String value;
+    private String mark;
     private String type;
 
-    @Transient
-    private Unit unit;
+////    @Transient
+//    private Unit unit;
 
-    public Characteristic(String name, Unit unit) {
+    public Characteristic(String name, String mark, String value, String type) {
         this.name = name;
-        this.unit = unit;
-
+        this.mark = mark;
+        this.value = value;
+        this.type = type;
         //TODO
-        this.value = String.valueOf(unit.getValue());
-        this.type = unit.getClass().getSimpleName();
+//        this.value = String.valueOf(unit.getValue());
+//        this.type = unit.getClass().getSimpleName();
     }
 }

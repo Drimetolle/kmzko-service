@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="compareConveyorAndQuestionnaire" class="com.kmzko.service.utils.CompareConveyorAndQuestionnaire">
+        <constructor-arg value="90"/>
+        <constructor-arg value="0.95"/>
+        <constructor-arg>
+            <map>
+                <entry key="tape-width" value="45"/>
+                <entry key="tape-length" value="45"/>
+                <entry key="productivity" value="1"/>
+                <entry key="tilt-angle" value="60"/>
+                <entry key="tape-speed" value="1"/>
+                <entry key="bulk" value="1"/>
+                <entry key="grading" value="1"/>
+                <entry key="fraction" value="1"/>
+                <entry key="moisture" value="1"/>
+                <entry key="temperature-cargo" value="1"/>
+                <entry key="conveyor-control-system" value="1"/>
+                <entry key="installation-chief" value="1"/>
+                <entry key="temperature-range" value="1"/>
+                <entry key="humidity-air" value="1"/>
+                <entry key="dust" value="1"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg>
+            <set>
+                <value>tape-width</value>
+                <value>tape-length</value>
+                <value>productivity</value>
+                <value>tilt-angle</value>
+                <value>tape-speed</value>
+                <value>bulk</value>
+                <value>grading</value>
+                <value>fraction</value>
+                <value>moisture</value>
+                <value>temperature-cargo</value>
+                <value>conveyor-control-system</value>
+                <value>installation-chief</value>
+                <value>temperature-range</value>
+                <value>humidity-air</value>
+                <value>dust</value>
+            </set>
+        </constructor-arg>
+    </bean>
+</beans>

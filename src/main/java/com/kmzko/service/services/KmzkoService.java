@@ -10,13 +10,15 @@ import java.util.List;
 @Service
 public class KmzkoService {
     private final AdapterAPI adapter;
+    private final SearchService searchService;
 
-    public KmzkoService(AdapterAPI adapter) {
+    public KmzkoService(AdapterAPI adapter, SearchService searchService1) {
         this.adapter = adapter;
+        this.searchService = searchService1;
     }
 
     public List<Conveyor> getNearConveyors(List<Rate> rates) {
-        return adapter.getNearConveyors(rates);
+        return searchService.getNearConveyors(rates);
     }
 
     public Conveyor getConveyorById(long id) {

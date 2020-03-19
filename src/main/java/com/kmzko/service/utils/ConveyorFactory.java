@@ -49,7 +49,8 @@ public class ConveyorFactory {
     private List<Characteristic> createCharacteristic(List<Map<String, Object>> characteristics) {
         return characteristics.stream().map(i -> {
             Unit u = CharacteristicByStringType((String) i.get("value"));
-            return new Characteristic((String) i.get("name"), u);
+            // TODO VERY IMPORTENT
+            return new Characteristic((String) i.get("name"), (String) i.get("mark"), (String) i.get("value"), (String) i.get("type"));
         }).collect(Collectors.toList());
     }
 

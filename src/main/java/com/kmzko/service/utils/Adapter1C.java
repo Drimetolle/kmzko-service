@@ -2,6 +2,7 @@ package com.kmzko.service.utils;
 
 import com.kmzko.service.domains.Rate;
 import com.kmzko.service.domains.conveyor.Conveyor;
+import com.kmzko.service.domains.conveyor.Detail;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +30,11 @@ public class Adapter1C implements AdapterAPI {
     @Override
     public Conveyor getConveyorById(long id) {
         return constructConveyor(api.getConveyorById(id));
+    }
+
+    @Override
+    public Detail getDetailById(long id) {
+        return null;
     }
 
     private List<Conveyor> constructConveyorList(List<Map<String, Object>> rawConveyors) {

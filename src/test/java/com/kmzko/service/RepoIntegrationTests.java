@@ -35,9 +35,9 @@ public class RepoIntegrationTests {
 
     @Test
     public void checkOneInsertToQuestionnaireRepo() throws Exception {
-        Rate rate1 = new Rate("wqe1", "ggsd1");
-        Rate rate2 = new Rate("wqe2", "ggsd2");
-        Rate rate3 = new Rate("wqe3", "ggsd3");
+        Rate rate1 = new Rate("wqe1", "ggsd1", "");
+        Rate rate2 = new Rate("wqe2", "ggsd2", "");
+        Rate rate3 = new Rate("wqe3", "ggsd3", "");
         List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{rate1, rate2, rate3}));
 
         Questionnaire res = new Questionnaire();

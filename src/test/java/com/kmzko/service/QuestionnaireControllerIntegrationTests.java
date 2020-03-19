@@ -35,9 +35,6 @@ public class QuestionnaireControllerIntegrationTests {
     @Autowired
     QuestionnaireRepo questionnaireRepo;
 
-    @Autowired
-    RateRepo rateRepo;
-
     @Test
     public void EnumReturnValue() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire").contentType(MediaType.ALL))
@@ -48,9 +45,9 @@ public class QuestionnaireControllerIntegrationTests {
 
     @Test
     public void testReturnValue() throws Exception {
-        Rate rate1 = new Rate("wqe1", "");
-        Rate rate2 = new Rate("wqe2", "");
-        Rate rate3 = new Rate("wqe3", "");
+        Rate rate1 = new Rate("wqe1", "", "");
+        Rate rate2 = new Rate("wqe2", "", "");
+        Rate rate3 = new Rate("wqe3", "", "");
         List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{rate1, rate2, rate3}));
 
         Questionnaire res = new Questionnaire();

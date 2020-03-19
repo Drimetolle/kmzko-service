@@ -54,7 +54,7 @@ public class ConveyorFactoryTest {
         assertThat(conveyor.getNodes().get(0).getDetails().size()).isEqualTo(1);
         assertThat(conveyor.getNodes().get(0).getDetails().get(0).getName()).isEqualTo("detail1");
         assertThat(conveyor.getNodes().get(0).getDetails().get(0).getCharacteristics().size()).isEqualTo(1);
-        assertThat(conveyor.getNodes().get(0).getDetails().get(0).getCharacteristics().get(0).getUnit().getValue()).isEqualTo(123);
+        assertThat(conveyor.getNodes().get(0).getDetails().get(0).getCharacteristics().get(0).getValue()).isEqualTo("123");
     }
 
 }
