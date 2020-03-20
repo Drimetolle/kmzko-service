@@ -7,6 +7,7 @@ import com.kmzko.service.utils.AdapterAPI;
 import com.kmzko.service.utils.CompareConveyorAndQuestionnaire;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,7 @@ public class SearchService {
     }
 
     public List<Conveyor> getNearConveyors(List<Rate> rates) {
-//        return integral(rates);
-        return adapter.getNearConveyors(rates);
+        return integral(rates);
     }
 
     private List<Conveyor> integral(List<Rate> rates) {
@@ -33,6 +33,6 @@ public class SearchService {
     }
 
     private List<Conveyor> getAll() {
-        return repository.findAll();
+        return adapter.getNearConveyors(new ArrayList<>());
     }
 }
