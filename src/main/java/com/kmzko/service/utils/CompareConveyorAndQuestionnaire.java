@@ -18,10 +18,6 @@ public class CompareConveyorAndQuestionnaire {
     private final Map<String, Float> rates;
     private final Set<String> nodeMarks;
 
-    public float getInterval() {
-        return interval;
-    }
-
     public boolean proximity(Conveyor conveyor, List<Rate> rates) {
         List<Detail> details = conveyor.getNodes().stream()
                 .flatMap(i -> i.getDetails().stream()).collect(Collectors.toList());
