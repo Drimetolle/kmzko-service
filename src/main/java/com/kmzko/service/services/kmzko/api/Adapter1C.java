@@ -1,8 +1,11 @@
-package com.kmzko.service.utils;
+package com.kmzko.service.services.kmzko.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kmzko.service.domains.ConveyorType;
 import com.kmzko.service.domains.Rate;
 import com.kmzko.service.domains.conveyor.Conveyor;
 import com.kmzko.service.domains.conveyor.Detail;
+import com.kmzko.service.utils.ConveyorFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +37,17 @@ public class Adapter1C implements AdapterAPI {
 
     @Override
     public Detail getDetailById(long id) {
+        return null;
+    }
+
+    @Override
+    public List<Detail> getOptionsByType(ConveyorType type) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(api.getOptions(), List.class);
+    }
+
+    @Override
+    public Object getCompatibilityDetails(List<Detail> details, Detail detail) {
         return null;
     }
 

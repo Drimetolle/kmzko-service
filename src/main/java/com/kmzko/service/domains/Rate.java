@@ -19,11 +19,11 @@ public class Rate {
     private long id;
     private String name;
     private String value;
-    private String type;
+    private String mark;
 
-    public Rate(String name, String value, String type) {
+    public Rate(String name, String value, String mark) {
         this.name = name;
         this.value = value;
-        this.type = type;
+        this.mark = mark;
     }
 }

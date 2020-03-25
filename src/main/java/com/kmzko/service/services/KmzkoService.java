@@ -1,8 +1,10 @@
 package com.kmzko.service.services;
 
+import com.kmzko.service.domains.ConveyorType;
 import com.kmzko.service.domains.Rate;
 import com.kmzko.service.domains.conveyor.Conveyor;
-import com.kmzko.service.utils.AdapterAPI;
+import com.kmzko.service.domains.conveyor.Detail;
+import com.kmzko.service.services.kmzko.api.AdapterAPI;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,4 +27,7 @@ public class KmzkoService {
         return adapter.getConveyorById(id);
     }
 
+    public List<Detail> getOptions(ConveyorType type) {
+        return adapter.getOptionsByType(type);
+    }
 }

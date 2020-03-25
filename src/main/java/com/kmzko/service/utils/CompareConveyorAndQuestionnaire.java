@@ -39,7 +39,7 @@ public class CompareConveyorAndQuestionnaire {
         float acc = 0;
         for (Detail detail : details) {
             List<Characteristic> characteristics = detail.getCharacteristics().stream()
-                    .filter(i -> i.getMark().equals(rate.getType()) && compareTwoRate(i.getValue(), rate.getValue()))
+                    .filter(i -> i.getMark().equals(rate.getMark()) && compareTwoRate(i.getValue(), rate.getValue()))
                     .collect(Collectors.toList());
 
             acc += characteristics.stream().map(i -> rates.get(i.getMark())).reduce(Float::sum).orElse((float) 0);

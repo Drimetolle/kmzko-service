@@ -3,7 +3,7 @@ package com.kmzko.service.services;
 import com.kmzko.service.domains.Rate;
 import com.kmzko.service.domains.conveyor.Conveyor;
 import com.kmzko.service.repositories.ConveyorRepo;
-import com.kmzko.service.utils.AdapterAPI;
+import com.kmzko.service.services.kmzko.api.AdapterAPI;
 import com.kmzko.service.utils.CompareConveyorAndQuestionnaire;
 import org.springframework.stereotype.Service;
 
