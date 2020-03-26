@@ -19,8 +19,14 @@ public class QuestionnaireDeployer implements Deployer<Questionnaire> {
     }
 
     @Override
-    public boolean delete(Questionnaire o) {
-        return false;
+    public boolean delete(Questionnaire questionnaire) {
+        try {
+            questionnaireRepo.delete(questionnaire);
+        }
+        catch (EmptyResultDataAccessException ex) {
+            return false;
+        }
+        return true;
     }
 
     @Override
