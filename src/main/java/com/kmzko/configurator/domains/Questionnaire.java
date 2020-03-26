@@ -18,7 +18,8 @@ public class Questionnaire {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ConveyorType type;
     @CreationTimestamp
     private Date utilDate;
 
@@ -29,7 +30,7 @@ public class Questionnaire {
         this.rateList = new ArrayList<>();
     }
 
-    public Questionnaire(List<Rate> rateList, String type) {
+    public Questionnaire(List<Rate> rateList, ConveyorType type) {
         this.rateList = rateList;
         this.type = type;
     }

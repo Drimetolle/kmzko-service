@@ -21,4 +21,9 @@ public class User {
     private String password = UUID.randomUUID().toString();
     @ManyToMany
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<PersonalConveyor> conveyors;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<PersonalQuestionnaire> questionnaires;
 }

@@ -52,7 +52,7 @@ public class QuestionnaireControllerIntegrationTests {
         Questionnaire res = new Questionnaire();
         res.setName("quest");
         res.setRateList(list);
-        res.setType(ConveyorType.TAPE.toString());
+        res.setType(ConveyorType.TAPE);
 
         List<Questionnaire> listQ = new ArrayList(Arrays.asList(new Questionnaire[]{res}));
 

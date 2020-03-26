@@ -14,9 +14,9 @@ public class KmzkoService {
     private final AdapterAPI adapter;
     private final SearchService searchService;
 
-    public KmzkoService(AdapterAPI adapter, SearchService searchService1) {
+    public KmzkoService(AdapterAPI adapter, SearchService searchService) {
         this.adapter = adapter;
-        this.searchService = searchService1;
+        this.searchService = searchService;
     }
 
     public List<Conveyor> getNearConveyors(List<Rate> rates) {

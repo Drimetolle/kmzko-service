@@ -73,7 +73,7 @@ public class DeployControllerIntegrationTests {
         Questionnaire res = new Questionnaire();
         res.setName("quest");
         res.setRateList(list);
-        res.setType(ConveyorType.TAPE.toString());
+        res.setType(ConveyorType.TAPE);
 
         List<Questionnaire> listQ = new ArrayList(Arrays.asList(new Questionnaire[]{res}));
 
@@ -99,7 +99,7 @@ public class DeployControllerIntegrationTests {
 
         Questionnaire res = new Questionnaire();
         res.setName("quest");
-        res.setType(ConveyorType.TAPE.toString());
+        res.setType(ConveyorType.TAPE);
         res.setRateList(list);
 
 

@@ -25,7 +25,7 @@ class ServiceApplicationTests {
     @Test
     void contextLoads() {
         List<Rate> list = new ArrayList(Arrays.asList(new Rate[]{new Rate(), new Rate(), new Rate()}));
-        Questionnaire res = new Questionnaire(list, ConveyorType.TAPE.toString());
+        Questionnaire res = new Questionnaire(list, ConveyorType.TAPE);
         Mockito.when(generateQuestionnaire.getLastRevisionQuestionnaire(any())).thenReturn(res);
 
         assertThat(generateQuestionnaire.getLastRevisionQuestionnaire(ConveyorType.TAPE)).isNotNull();

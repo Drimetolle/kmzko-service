@@ -1,9 +1,10 @@
 package com.kmzko.configurator.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.domains.Rate;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,10 +19,18 @@ public class PersonalQuestionnaire {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    private String type;
-    @CreationTimestamp
+    @Enumerated(EnumType.STRING)
+    private ConveyorType type;
+    @Column(insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date utilDate;
+
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rate> rateList;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

@@ -43,11 +43,11 @@ public class RepoIntegrationTests {
         Questionnaire res = new Questionnaire();
         res.setName("quest");
         res.setRateList(list);
-        res.setType(ConveyorType.TAPE.toString());
+        res.setType(ConveyorType.TAPE);
 
         questionnaireRepo.save(res);
 
-        List<Questionnaire> questionnaireList = questionnaireRepo.findByType(ConveyorType.TAPE.toString());
+        List<Questionnaire> questionnaireList = questionnaireRepo.findByType(ConveyorType.TAPE);
         Questionnaire questionnaire = questionnaireList.get(questionnaireList.size() - 1);
 
         assertThat(questionnaire.getRateList()).isNotNull();
