@@ -9,10 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.kmzko</groupId>
-    <artifactId>service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>service</name>
-    <description>Demo project for Spring Boot</description>
+    <artifactId>configurator</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>configurator</name>
 
     <properties>
         <java.version>1.8</java.version>
