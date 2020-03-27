@@ -27,10 +27,4 @@ public class SearchController {
         List<Conveyor> conveyors = service.getNearConveyors(payload);
         return ResponseEntity.ok(conveyors);
     }
-//
-//    @GetMapping(value = "/conveyors/{id}", produces = "application/json")
-//    public ResponseEntity<Conveyor> getConveyorById(@PathVariable long id) {
-//        Conveyor conveyors = service.getConveyorById(id);
-//        return ResponseEntity.ok(conveyors);
-//    }
 }

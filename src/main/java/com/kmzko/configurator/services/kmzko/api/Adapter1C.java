@@ -56,7 +56,6 @@ public class Adapter1C implements AdapterAPI {
     }
 
     private Conveyor constructConveyor(Map<String, Object> rawConveyor) {
-//        return factory.createByMap(rawConveyor);
-        return new ObjectMapper().convertValue(rawConveyor, Conveyor.class);
+        return factory.createByMap(rawConveyor);
     }
 }

@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,14 +52,14 @@ public class DeployControllerIntegrationTests {
 
     @Test
     public void deleteQuestionnaireIfNotExist() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/deploy/questionnaire/123").contentType(MediaType.ALL))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/questionnaires/123").contentType(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteQuestionnaireIfNotExistAndNotValidQueryParam() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/deploy/questionnaire/dfhas").contentType(MediaType.ALL))
+        mvc.perform(MockMvcRequestBuilders.delete("/api/questionnaires/dfhas").contentType(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -81,7 +82,7 @@ public class DeployControllerIntegrationTests {
 
         Questionnaire q = questionnaireRepo.findAll().iterator().next();
 
-        mvc.perform(MockMvcRequestBuilders.delete("/api/deploy/questionnaire/{id}", q.getId())
+        mvc.perform(MockMvcRequestBuilders.delete("/api/questionnaires/{id}", q.getId())
                 .contentType(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -103,11 +104,10 @@ public class DeployControllerIntegrationTests {
         res.setRateList(list);
 
 
-        mvc.perform(MockMvcRequestBuilders.post("/api/deploy/questionnaire")
+        mvc.perform(MockMvcRequestBuilders.post("/api/questionnaires")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(res)))
                 .andDo(print())
-                //.andExpect(header().string("Location", "http://localhost/api/questionnaire/"))
                 .andExpect(status().isCreated());
 
         assertThat(questionnaireRepo.count()).isEqualTo(1);

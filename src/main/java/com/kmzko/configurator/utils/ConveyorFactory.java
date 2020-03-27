@@ -1,5 +1,6 @@
 package com.kmzko.configurator.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kmzko.configurator.domains.conveyor.*;
 import com.kmzko.configurator.exeption.NotValidConveyorMapException;
 import org.springframework.stereotype.Service;
@@ -14,13 +15,7 @@ public class ConveyorFactory {
     }
 
     public Conveyor createByMap(Map<String, Object> rawConveyor) throws NotValidConveyorMapException {
-        Conveyor tmp = createConveyor(rawConveyor);
-
-        if (tmp.getNodes() == null) {
-            throw new NotValidConveyorMapException("parse error");
-        }
-
-        return tmp;
+        return new ObjectMapper().convertValue(rawConveyor, Conveyor.class);
     }
 
     public boolean validMap(Map<String, Object> rawConveyor) {

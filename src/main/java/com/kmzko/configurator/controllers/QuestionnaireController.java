@@ -2,13 +2,12 @@ package com.kmzko.configurator.controllers;
 
 import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.domains.Questionnaire;
-import com.kmzko.configurator.entity.PersonalConveyor;
-import com.kmzko.configurator.services.GenerateQuestionnaire;
+import com.kmzko.configurator.services.deployers.QuestionnaireDetailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Arrays;
@@ -16,13 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/questionnaire")
+@RequestMapping("/api/questionnaires")
 @CrossOrigin(origins = "*")
 public class QuestionnaireController {
-    private final GenerateQuestionnaire factoryQuestionnaire;
+    private final QuestionnaireDetailService detailService;
 
-    public QuestionnaireController(GenerateQuestionnaire factoryQuestionnaire) {
-        this.factoryQuestionnaire = factoryQuestionnaire;
+    public QuestionnaireController(QuestionnaireDetailService detailService) {
+        this.detailService = detailService;
     }
 
     @GetMapping(produces = "application/json")
@@ -40,16 +39,27 @@ public class QuestionnaireController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        Questionnaire questionnaire = factoryQuestionnaire.getLastRevisionQuestionnaire(type);
+        Questionnaire questionnaire = detailService.getLastRevisionQuestionnaire(type);
 
         return ResponseEntity.ok(questionnaire);
     }
 
-    @PostMapping(produces = "application/json")
-    public ResponseEntity<PersonalConveyor> saveUserQuestionnaire(HttpServletRequest request,
-                                                                       @Valid @RequestBody PersonalConveyor body) {
-        return ResponseEntity.created(URI.create(
-                String.format("http://%s%s%s", request.getLocalName(), "/api/questionnaire/", body.getId())))
-                .body(body);
+    @PostMapping
+    public ResponseEntity<Questionnaire> deployNewQuestionnaire(@Valid @RequestBody Questionnaire body) {
+        Questionnaire newBody = detailService.save(body);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newBody.getId())
+                .toUri();
+        return ResponseEntity.created(location)
+                .body(newBody);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteQuestionnaire(@PathVariable long id) {
+        if (!detailService.deleteById(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().build();
     }
 }

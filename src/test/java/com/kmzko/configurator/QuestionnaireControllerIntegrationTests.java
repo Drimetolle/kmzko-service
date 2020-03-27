@@ -36,9 +36,9 @@ public class QuestionnaireControllerIntegrationTests {
 
     @Test
     public void EnumReturnValue() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire").contentType(MediaType.ALL))
+        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaires").contentType(MediaType.ALL))
                 .andDo(print())
-//                .andExpect(content().string(containsString(ConveyorType.TAPE.getView())))
+                .andExpect(content().string(containsString(ConveyorType.TAPE.getView())))
                 .andExpect(status().isOk());
     }
 
@@ -59,7 +59,7 @@ public class QuestionnaireControllerIntegrationTests {
 
         questionnaireRepo.save(res);
 
-        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire/tape"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaires/tape"))
                 .andDo(print())
                 .andExpect(content().string(containsString("quest")))
                 .andExpect(content().string(containsString("wqe1")))
@@ -68,7 +68,7 @@ public class QuestionnaireControllerIntegrationTests {
 
     @Test
     public void badType() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaire/khgaohguhenjignji"))
+        mvc.perform(MockMvcRequestBuilders.get("/api/questionnaires/khgaohguhenjignji"))
                 .andExpect(content().string(containsString("")))
                 .andExpect(status().isNoContent());
     }
