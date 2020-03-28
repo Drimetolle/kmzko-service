@@ -1,34 +1,28 @@
-package com.kmzko.configurator.domains;
+package com.kmzko.configurator.domains.questionnaire;
 
+import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.entity.AbstractEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "questionnaire")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class Questionnaire {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class Questionnaire extends AbstractEntity {
     private String name;
     @Enumerated(EnumType.STRING)
     private ConveyorType type;
-    @CreationTimestamp
-    private Date utilDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rate> rateList;
-
-    public Questionnaire() {
-        this.rateList = new ArrayList<>();
-    }
 
     public Questionnaire(List<Rate> rateList, ConveyorType type) {
         this.rateList = rateList;

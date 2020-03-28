@@ -1,4 +1,4 @@
-package com.kmzko.configurator.domains;
+package com.kmzko.configurator.domains.conveyor;
 
 public enum ConveyorType {
     TAPE ("tape");

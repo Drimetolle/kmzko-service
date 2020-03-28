@@ -1,6 +1,6 @@
 package com.kmzko.configurator.domains.conveyor;
 
-import com.kmzko.configurator.domains.ConveyorType;
+import com.kmzko.configurator.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,16 +9,13 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "conveyor")
-public class Conveyor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Conveyor extends AbstractEntity {
     private String name;
     @Enumerated(EnumType.STRING)
     private ConveyorType type;
