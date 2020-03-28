@@ -1,6 +1,9 @@
-package com.kmzko.configurator.entity;
+package com.kmzko.configurator.entity.user;
 
+import com.kmzko.configurator.entity.AbstractEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,12 +12,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class User extends AbstractEntity {
     @Column(nullable=false, unique=true)
     private String email;
     private String name = "user";
