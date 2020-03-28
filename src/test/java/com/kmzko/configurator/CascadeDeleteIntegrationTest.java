@@ -1,10 +1,9 @@
 package com.kmzko.configurator;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
-import com.kmzko.configurator.entity.PersonalConveyor;
-import com.kmzko.configurator.entity.User;
+import com.kmzko.configurator.entity.user.PersonalConveyor;
+import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.repositories.ConveyorRepo;
 import com.kmzko.configurator.repositories.PersonalConveyorRepo;
 import com.kmzko.configurator.repositories.UserRepo;

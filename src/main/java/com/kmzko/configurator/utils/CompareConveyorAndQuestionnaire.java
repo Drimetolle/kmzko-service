@@ -1,6 +1,6 @@
 package com.kmzko.configurator.utils;
 
-import com.kmzko.configurator.domains.Rate;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Characteristic;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.conveyor.Detail;
@@ -27,7 +27,7 @@ public class CompareConveyorAndQuestionnaire {
         return acc >= bound;
     }
 
-    public float accumulate(List<Detail> conveyor, List<Rate> rates) {
+    private float accumulate(List<Detail> conveyor, List<Rate> rates) {
         float acc = 0;
         for (Rate rate : rates) {
             acc += matchInInterval(conveyor, rate);

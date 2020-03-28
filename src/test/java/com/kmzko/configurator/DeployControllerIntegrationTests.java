@@ -1,9 +1,9 @@
 package com.kmzko.configurator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kmzko.configurator.domains.ConveyorType;
-import com.kmzko.configurator.domains.Questionnaire;
-import com.kmzko.configurator.domains.Rate;
+import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.questionnaire.Questionnaire;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.repositories.QuestionnaireRepo;
 import com.kmzko.configurator.repositories.RateRepo;
 import org.assertj.core.util.Arrays;
@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

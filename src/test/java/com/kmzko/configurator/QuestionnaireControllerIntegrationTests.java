@@ -1,8 +1,8 @@
 package com.kmzko.configurator;
 
-import com.kmzko.configurator.domains.ConveyorType;
-import com.kmzko.configurator.domains.Questionnaire;
-import com.kmzko.configurator.domains.Rate;
+import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.questionnaire.Questionnaire;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.repositories.QuestionnaireRepo;
 import org.assertj.core.util.Arrays;
 import org.junit.Test;
