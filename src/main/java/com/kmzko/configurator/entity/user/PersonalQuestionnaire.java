@@ -23,7 +23,6 @@ public class PersonalQuestionnaire extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private ConveyorType type;
     @Column(insertable = false, updatable = false)
-
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rate> rateList;
 
