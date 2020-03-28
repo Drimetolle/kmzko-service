@@ -1,7 +1,8 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.domains.ConveyorType;
-import com.kmzko.configurator.domains.Questionnaire;
+import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.dto.QuestionnaireDto;
+import com.kmzko.configurator.mappers.QuestionnaireMapper;
 import com.kmzko.configurator.services.deployers.QuestionnaireDetailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,11 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class QuestionnaireController {
     private final QuestionnaireDetailService detailService;
+    private final QuestionnaireMapper mapper;
 
-    public QuestionnaireController(QuestionnaireDetailService detailService) {
+    public QuestionnaireController(QuestionnaireDetailService detailService, QuestionnaireMapper mapper) {
         this.detailService = detailService;
+        this.mapper = mapper;
     }
 
     @GetMapping(produces = "application/json")
@@ -32,21 +35,21 @@ public class QuestionnaireController {
     }
 
     @GetMapping(value = "/{rawType}", produces = "application/json")
-    public ResponseEntity<Questionnaire> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
+    public ResponseEntity<QuestionnaireDto> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
         ConveyorType type = ConveyorType.safeValueOf(rawType);
 
         if (type == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        Questionnaire questionnaire = detailService.getLastRevisionQuestionnaire(type);
+        QuestionnaireDto questionnaire = mapper.toDto(detailService.getLastRevisionQuestionnaire(type));
 
         return ResponseEntity.ok(questionnaire);
     }
 
     @PostMapping
-    public ResponseEntity<Questionnaire> deployNewQuestionnaire(@Valid @RequestBody Questionnaire body) {
-        Questionnaire newBody = detailService.save(body);
+    public ResponseEntity<QuestionnaireDto> deployNewQuestionnaire(@Valid @RequestBody QuestionnaireDto body) {
+        QuestionnaireDto newBody = mapper.toDto(detailService.save(mapper.toEntity(body)));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

@@ -1,7 +1,14 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.entity.PersonalConveyor;
-import com.kmzko.configurator.entity.PersonalQuestionnaire;
+import com.kmzko.configurator.dto.ConveyorDto;
+import com.kmzko.configurator.dto.PersonalConveyorDto;
+import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
+import com.kmzko.configurator.entity.user.PersonalConveyor;
+import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.mappers.ConveyorMapper;
+import com.kmzko.configurator.mappers.PersonalConveyorMapper;
+import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
+import com.kmzko.configurator.mappers.QuestionnaireMapper;
 import com.kmzko.configurator.services.deployers.PersonalConveyorDetailService;
 import com.kmzko.configurator.services.deployers.PersonalQuestionnaireDetailService;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -18,25 +26,32 @@ import java.util.List;
 public class UserStaffController {
     private final PersonalConveyorDetailService personalConveyorService;
     private final PersonalQuestionnaireDetailService personalQuestionnaireService;
+    private final PersonalConveyorMapper conveyorMapper;
+    private final PersonalQuestionnaireMapper questionnaireMapper;
 
-    public UserStaffController(PersonalConveyorDetailService personalConveyorService, PersonalQuestionnaireDetailService personalQuestionnaireService) {
+    public UserStaffController(PersonalConveyorDetailService personalConveyorService,
+                               PersonalQuestionnaireDetailService personalQuestionnaireService,
+                               PersonalConveyorMapper conveyorMapper, PersonalQuestionnaireMapper questionnaireMapper) {
         this.personalConveyorService = personalConveyorService;
         this.personalQuestionnaireService = personalQuestionnaireService;
+        this.conveyorMapper = conveyorMapper;
+        this.questionnaireMapper = questionnaireMapper;
     }
 
     @GetMapping(value = "/conveyors", produces = "application/json")
-    public ResponseEntity<List<PersonalConveyor>> getUserConveyors() {
-        return ResponseEntity.ok(personalConveyorService.getAll());
+    public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors() {
+        return ResponseEntity.ok(personalConveyorService.getAll().stream().map(conveyorMapper::toDto)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/conveyors/{id}", produces = "application/json")
-    public ResponseEntity<PersonalConveyor> getUserConveyor(@PathVariable long id) {
-        return ResponseEntity.ok(personalConveyorService.getById(id));
+    public ResponseEntity<PersonalConveyorDto> getUserConveyor(@PathVariable long id) {
+        return ResponseEntity.ok(conveyorMapper.toDto(personalConveyorService.getById(id)));
     }
 
     @PostMapping(value = "/conveyors", produces = "application/json")
-    public ResponseEntity<PersonalConveyor> saveUserConveyor(@Valid @RequestBody PersonalConveyor body) {
-        PersonalConveyor newBody = personalConveyorService.save(body);
+    public ResponseEntity<PersonalConveyorDto> saveUserConveyor(@Valid @RequestBody PersonalConveyorDto body) {
+        PersonalConveyorDto newBody = conveyorMapper.toDto(personalConveyorService.save(conveyorMapper.toEntity(body)));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -49,7 +64,7 @@ public class UserStaffController {
     }
 
     @PutMapping(value = "/conveyors/{id}", produces = "application/json")
-    public ResponseEntity<PersonalConveyor> changeUserConveyor(@Valid @RequestBody PersonalConveyor body,
+    public ResponseEntity<PersonalConveyorDto> changeUserConveyor(@Valid @RequestBody PersonalConveyorDto body,
                                                                @PathVariable long id) {
         return null;
     }
@@ -62,18 +77,19 @@ public class UserStaffController {
     }
 
     @GetMapping(value = "/questionnaires", produces = "application/json")
-    public ResponseEntity<List<PersonalQuestionnaire>> getUserQuestionnaires() {
-        return ResponseEntity.ok(personalQuestionnaireService.getAll());
+    public ResponseEntity<List<PersonalQuestionnaireDto>> getUserQuestionnaires() {
+        return ResponseEntity.ok(personalQuestionnaireService.getAll().stream().map(questionnaireMapper::toDto)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/questionnaires/{id}", produces = "application/json")
-    public ResponseEntity<PersonalQuestionnaire> getUserQuestionnaire(@PathVariable long id) {
-        return ResponseEntity.ok(personalQuestionnaireService.getById(id));
+    public ResponseEntity<PersonalQuestionnaireDto> getUserQuestionnaire(@PathVariable long id) {
+        return ResponseEntity.ok(questionnaireMapper.toDto(personalQuestionnaireService.getById(id)));
     }
 
     @PostMapping(value = "/questionnaires", produces = "application/json")
-    public ResponseEntity<PersonalQuestionnaire> saveUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaire body) {
-        PersonalQuestionnaire newBody = personalQuestionnaireService.save(body);
+    public ResponseEntity<PersonalQuestionnaireDto> saveUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body) {
+        PersonalQuestionnaireDto newBody = questionnaireMapper.toDto(personalQuestionnaireService.save(questionnaireMapper.toEntity(body)));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -86,7 +102,7 @@ public class UserStaffController {
     }
 
     @PutMapping(value = "/questionnaires/{id}", produces = "application/json")
-    public ResponseEntity<PersonalQuestionnaire> changeUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaire body,
+    public ResponseEntity<PersonalQuestionnaireDto> changeUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body,
                                                                          @PathVariable long id) {
         return null;
     }

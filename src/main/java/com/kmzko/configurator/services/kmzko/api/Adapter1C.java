@@ -1,8 +1,9 @@
 package com.kmzko.configurator.services.kmzko.api;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kmzko.configurator.domains.ConveyorType;
-import com.kmzko.configurator.domains.Rate;
+import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.conveyor.Detail;
 import com.kmzko.configurator.utils.ConveyorFactory;
@@ -43,7 +44,9 @@ public class Adapter1C implements AdapterAPI {
     @Override
     public List<Detail> getOptionsByType(ConveyorType type) {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.convertValue(api.getOptions(), List.class);
+        JavaType detailType = mapper.getTypeFactory().
+                constructCollectionType(List.class, Detail.class);
+        return mapper.convertValue(api.getOptions(), detailType);
     }
 
     @Override

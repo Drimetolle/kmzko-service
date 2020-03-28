@@ -1,7 +1,9 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.domains.Rate;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
+import com.kmzko.configurator.dto.ConveyorDto;
+import com.kmzko.configurator.mappers.ConveyorMapper;
 import com.kmzko.configurator.services.KmzkoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +17,18 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 public class SearchController {
     private final KmzkoService service;
+    private final ConveyorMapper mapper;
 
-    public SearchController(KmzkoService service) {
+    public SearchController(KmzkoService service, ConveyorMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping(value = "/conveyors", produces = "application/json")
-    public ResponseEntity<List<Conveyor>> getListOfConveyor(@RequestParam Map<String,String> allParams) {
+    public ResponseEntity<List<ConveyorDto>> getListOfConveyor(@RequestParam Map<String,String> allParams) {
         List<Rate> payload = allParams.keySet().stream()
                 .map(i -> new Rate("", allParams.get(i), i)).collect(Collectors.toList());
         List<Conveyor> conveyors = service.getNearConveyors(payload);
-        return ResponseEntity.ok(conveyors);
+        return ResponseEntity.ok(conveyors.stream().map(mapper::toDto).collect(Collectors.toList()));
     }
 }

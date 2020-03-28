@@ -1,6 +1,6 @@
 package com.kmzko.configurator.services.deployers;
 
-import com.kmzko.configurator.entity.PersonalConveyor;
+import com.kmzko.configurator.entity.user.PersonalConveyor;
 import com.kmzko.configurator.repositories.PersonalConveyorRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;

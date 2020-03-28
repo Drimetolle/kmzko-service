@@ -1,6 +1,6 @@
 package com.kmzko.configurator.services;
 
-import com.kmzko.configurator.domains.Rate;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.repositories.ConveyorRepo;
 import com.kmzko.configurator.services.kmzko.api.AdapterAPI;
