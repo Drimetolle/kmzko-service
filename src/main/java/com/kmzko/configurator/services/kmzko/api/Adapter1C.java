@@ -6,6 +6,7 @@ import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.conveyor.Detail;
+import com.kmzko.configurator.mappers.ConveyorMapper;
 import com.kmzko.configurator.utils.ConveyorFactory;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class Adapter1C implements AdapterAPI {
     private final Request1CAPI api;
     private final ConveyorFactory factory;
+    private final ConveyorMapper mapper;
 
-    public Adapter1C(Request1CAPI api, ConveyorFactory factory) {
+    public Adapter1C(Request1CAPI api, ConveyorFactory factory, ConveyorMapper mapper) {
         this.api = api;
         this.factory = factory;
+        this.mapper = mapper;
     }
 
     @Override
