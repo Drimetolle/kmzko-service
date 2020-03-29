@@ -38,6 +38,8 @@ public class DeployControllerIntegrationTests {
     @Autowired
     RateRepo rateRepo;
 
+    private final String  baseUrl = "/api/questionnaires";
+
     @Before
     public void setUp() {
         questionnaireRepo.deleteAll();
@@ -51,14 +53,14 @@ public class DeployControllerIntegrationTests {
 
     @Test
     public void deleteQuestionnaireIfNotExist() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/questionnaires/123").contentType(MediaType.ALL))
+        mvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/123").contentType(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteQuestionnaireIfNotExistAndNotValidQueryParam() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/api/questionnaires/dfhas").contentType(MediaType.ALL))
+        mvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/dfhas").contentType(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -81,7 +83,7 @@ public class DeployControllerIntegrationTests {
 
         Questionnaire q = questionnaireRepo.findAll().iterator().next();
 
-        mvc.perform(MockMvcRequestBuilders.delete("/api/questionnaires/{id}", q.getId())
+        mvc.perform(MockMvcRequestBuilders.delete(baseUrl + "/{id}", q.getId())
                 .contentType(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -103,7 +105,7 @@ public class DeployControllerIntegrationTests {
         res.setRateList(list);
 
 
-        mvc.perform(MockMvcRequestBuilders.post("/api/questionnaires")
+        mvc.perform(MockMvcRequestBuilders.post(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(res)))
                 .andDo(print())
