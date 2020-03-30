@@ -1,4 +1,4 @@
-package com.kmzko.configurator;
+package com.kmzko.configurator.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

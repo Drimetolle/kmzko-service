@@ -1,4 +1,4 @@
-package com.kmzko.configurator;
+package com.kmzko.configurator.mapper;
 
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.conveyor.ConveyorType;

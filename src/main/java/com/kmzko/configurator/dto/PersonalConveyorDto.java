@@ -17,4 +17,5 @@ public class PersonalConveyorDto extends AbstractDto {
     private List<NodeDto> nodes;
     @JsonIgnore
     private UserDto user;
+    private List<OptionalDetailDto> optionalDetails;
 }

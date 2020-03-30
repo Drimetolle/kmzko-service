@@ -1,6 +1,6 @@
 package com.kmzko.configurator.entity.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kmzko.configurator.domains.OptionalDetail;
 import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.domains.conveyor.Node;
 import com.kmzko.configurator.entity.AbstractEntity;
@@ -25,8 +25,10 @@ public class PersonalConveyor extends AbstractEntity {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Node> nodes;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "conveyor", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<OptionalDetail> optionalDetails;
 }

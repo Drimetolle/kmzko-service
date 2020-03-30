@@ -1,4 +1,4 @@
-package com.kmzko.configurator;
+package com.kmzko.configurator.controller;
 
 import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Questionnaire;
