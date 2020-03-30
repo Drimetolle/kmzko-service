@@ -7,10 +7,8 @@ import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.repositories.QuestionnaireRepo;
 import com.kmzko.configurator.repositories.RateRepo;
 import org.assertj.core.util.Arrays;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,12 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.assertj.core.api.Assertions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,15 +40,10 @@ public class DeployControllerIntegrationTests {
 
     private final String  baseUrl = "/api/questionnaires";
 
-    @BeforeEach
+    @Before
     public void setUp() {
         questionnaireRepo.deleteAll();
         rateRepo.deleteAll();
-    }
-
-    @After
-    public void check() {
-
     }
 
     @Test

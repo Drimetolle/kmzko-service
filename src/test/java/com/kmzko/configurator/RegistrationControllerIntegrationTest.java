@@ -1,4 +1,4 @@
-package com.kmzko.configurator.controllers;
+package com.kmzko.configurator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kmzko.configurator.dto.UserDto;
@@ -6,7 +6,7 @@ import com.kmzko.configurator.mappers.UserMapper;
 import com.kmzko.configurator.repositories.UserRepo;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class RegistrationControllerIntegrationTest {
+public class RegistrationControllerIntegrationTest {
     @Autowired
     private MockMvc mvc;
     @Autowired
@@ -37,13 +37,13 @@ class RegistrationControllerIntegrationTest {
 
     private final String  baseUrl = "/api/join";
 
-    @BeforeEach
+    @Before
     public void setUp() {
         repo.deleteAll();
     }
 
     @Test
-    void createUser() throws Exception {
+    public void createUser() throws Exception {
         UserDto userDto = new UserDto("fasf", "asfafs", "qwrfqw", new HashSet<>());
         mvc.perform(MockMvcRequestBuilders.post(baseUrl).contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userDto)))
@@ -55,7 +55,7 @@ class RegistrationControllerIntegrationTest {
     }
 
     @Test
-    void createEmptyUser() throws Exception {
+    public void createEmptyUser() throws Exception {
         UserDto userDto = new UserDto();
         mvc.perform(MockMvcRequestBuilders.post(baseUrl).contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userDto)))
@@ -66,7 +66,7 @@ class RegistrationControllerIntegrationTest {
     }
 
     @Test
-    void createZeroLengthFieldUser() throws Exception {
+    public void createZeroLengthFieldUser() throws Exception {
         UserDto userDto = new UserDto("", "", "", new HashSet<>());
         mvc.perform(MockMvcRequestBuilders.post(baseUrl).contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userDto)))
@@ -77,7 +77,7 @@ class RegistrationControllerIntegrationTest {
     }
 
     @Test
-    void createUserIfEmailExist() throws Exception {
+    public void createUserIfEmailExist() throws Exception {
         UserDto userDto = new UserDto("1", "1", "1", new HashSet<>());
         UserDto secondUserDto = new UserDto("1", "2", "2", new HashSet<>());
         repo.save(mapper.toEntity(userDto));
