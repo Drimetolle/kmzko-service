@@ -22,10 +22,8 @@ public class PersonalConveyorDetailService implements DetailService<PersonalConv
     }
 
     @Override
-    public PersonalConveyor getById(long id) {
-        Optional<PersonalConveyor> item = conveyorRepo.findById(id);
-
-        return item.orElseGet(PersonalConveyor::new);
+    public Optional<PersonalConveyor> getById(long id) {
+        return conveyorRepo.findById(id);
     }
 
     @Override

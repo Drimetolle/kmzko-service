@@ -22,10 +22,8 @@ public class PersonalQuestionnaireDetailService implements DetailService<Persona
     }
 
     @Override
-    public PersonalQuestionnaire getById(long id) {
-        Optional<PersonalQuestionnaire> item = questionnaireRepo.findById(id);
-
-        return item.orElseGet(PersonalQuestionnaire::new);
+    public Optional<PersonalQuestionnaire> getById(long id) {
+        return questionnaireRepo.findById(id);
     }
 
     @Override

@@ -22,10 +22,8 @@ public class ConveyorDetailService implements DetailService<Conveyor> {
     }
 
     @Override
-    public Conveyor getById(long id) {
-        Optional<Conveyor> item = conveyorRepo.findById(id);
-
-        return item.orElseGet(Conveyor::new);
+    public Optional<Conveyor> getById(long id) {
+        return conveyorRepo.findById(id);
     }
 
     @Override
