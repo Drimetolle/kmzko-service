@@ -10,6 +10,7 @@ import org.assertj.core.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,7 +41,7 @@ public class DeployControllerIntegrationTests {
 
     private final String  baseUrl = "/api/questionnaires";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         questionnaireRepo.deleteAll();
         rateRepo.deleteAll();

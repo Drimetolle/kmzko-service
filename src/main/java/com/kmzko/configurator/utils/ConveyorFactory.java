@@ -6,12 +6,13 @@ import com.kmzko.configurator.dto.ConveyorDto;
 import com.kmzko.configurator.exeption.NotValidConveyorMapException;
 import com.kmzko.configurator.mappers.ConveyorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class ConveyorFactory {
     @Autowired
     private ConveyorMapper conveyorMapper;
