@@ -1,5 +1,6 @@
 package com.kmzko.configurator.services.kmzko.api;
 
+import com.kmzko.configurator.domains.OptionalDetail;
 import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
@@ -11,6 +12,6 @@ public interface AdapterAPI {
     List<Conveyor> getNearConveyors(List<Rate> rates);
     Conveyor getConveyorById(long id);
     Detail getDetailById(long id);
-    List<Detail> getOptionsByType(ConveyorType type);
+    List<OptionalDetail> getOptionsByType(ConveyorType type);
     Object getCompatibilityDetails(List<Detail> details, Detail detail);
 }

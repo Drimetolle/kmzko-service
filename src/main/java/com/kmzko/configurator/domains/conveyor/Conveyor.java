@@ -19,6 +19,7 @@ public class Conveyor extends AbstractEntity {
     private String name;
     @Enumerated(EnumType.STRING)
     private ConveyorType type;
+    private Boolean isTemplate = false;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Node> nodes;
 

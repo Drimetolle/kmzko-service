@@ -26,7 +26,7 @@ public class ConveyorMapperTest {
     @Test
     public void defaultBehaviorEntityToDto() {
         List<Node> nodeList = new ArrayList<>();
-        Conveyor conveyor = new Conveyor("C1", ConveyorType.TAPE, nodeList);
+        Conveyor conveyor = new Conveyor("C1", ConveyorType.TAPE, false, nodeList);
         conveyor.setId(Long.valueOf(1));
 
         ConveyorDto personalQuestionnaire = mapper.toDto(conveyor);
