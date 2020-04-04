@@ -1,6 +1,5 @@
-package com.kmzko.configurator.domains.conveyor;
+package com.kmzko.configurator.entity;
 
-import com.kmzko.configurator.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,19 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "unit")
+@Table(name = "purchase")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Unit extends AbstractEntity {
-    private int value;
+public class Purchase extends AbstractEntity {
+    private String stub;
 }
-
-/*
-* type:
-* meter
-* kilogram
-* watt
-* cross
-* */

@@ -12,5 +12,6 @@ import java.util.List;
 @Setter
 public class DetailDto extends AbstractDto {
     private String name;
+    private int count;
     private List<CharacteristicDto> characteristics;
 }

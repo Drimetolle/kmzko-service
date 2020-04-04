@@ -41,7 +41,7 @@ public class CompareConveyorAndQuestionnaireTest {
         Rate rate1 = new Rate("", "2", "tape-length");
         Rate rate2 = new Rate("", "1", "tape-width");
 
-        Detail d1 = new Detail("1", characteristicList);
+        Detail d1 = new Detail("1", 2, characteristicList);
 
         Conveyor conv = new Conveyor();
         conv.setNodes(Arrays.asList(new Node("", Arrays.asList(d1))));
@@ -61,7 +61,7 @@ public class CompareConveyorAndQuestionnaireTest {
         Rate rate1 = new Rate("", "2", "tape-length");
         Rate rate2 = new Rate("", "5435", "tape-width");
 
-        Detail d1 = new Detail("1", characteristicList);
+        Detail d1 = new Detail("1", 2, characteristicList);
 
         Conveyor conv = new Conveyor();
         conv.setNodes(Arrays.asList(new Node("", Arrays.asList(d1))));
@@ -81,7 +81,7 @@ public class CompareConveyorAndQuestionnaireTest {
         Rate rate1 = new Rate("", "2", "tape-length");
         Rate rate2 = new Rate("", "5435", "tape-width");
 
-        Detail d1 = new Detail("1", characteristicList);
+        Detail d1 = new Detail("1",2, characteristicList);
 
         Conveyor conv = new Conveyor();
         conv.setNodes(Arrays.asList(new Node("", Arrays.asList(d1))));
@@ -101,7 +101,7 @@ public class CompareConveyorAndQuestionnaireTest {
         Rate rate1 = new Rate("", "2", "tape-length");
         Rate rate2 = new Rate("", "5435", "tape-widthfdsdgsdggsdggsdsdg");
 
-        Detail d1 = new Detail("1", characteristicList);
+        Detail d1 = new Detail("1",2, characteristicList);
 
         Conveyor conv = new Conveyor();
         conv.setNodes(Arrays.asList(new Node("", Arrays.asList(d1))));

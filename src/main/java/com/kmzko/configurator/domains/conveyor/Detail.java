@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 public class Detail extends AbstractEntity {
     private String name;
+    private int count;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Characteristic> characteristics;
 }
