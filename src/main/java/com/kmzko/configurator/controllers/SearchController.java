@@ -5,6 +5,7 @@ import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.dto.ConveyorDto;
 import com.kmzko.configurator.mappers.ConveyorMapper;
 import com.kmzko.configurator.services.KmzkoService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class SearchController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "/conveyors", produces = "application/json")
-    public ResponseEntity<List<ConveyorDto>> getListOfConveyor(@RequestParam Map<String,String> allParams) {
+    @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ConveyorDto>> searchConveyors(@RequestParam Map<String,String> allParams) {
         List<Rate> payload = allParams.keySet().stream()
                 .map(i -> new Rate("", allParams.get(i), i)).collect(Collectors.toList());
         List<Conveyor> conveyors = service.getNearConveyors(payload);

@@ -5,6 +5,7 @@ import com.kmzko.configurator.dto.QuestionnaireDto;
 import com.kmzko.configurator.mappers.QuestionnaireMapper;
 import com.kmzko.configurator.services.deployers.QuestionnaireDetailService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,14 +28,14 @@ public class QuestionnaireController {
         this.mapper = mapper;
     }
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getListOfConveyorType() {
         List<ConveyorType> types = Arrays.asList(ConveyorType.values());
         List<String> result = types.stream().map(ConveyorType::getView).collect(Collectors.toList());
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/{rawType}", produces = "application/json")
+    @GetMapping(value = "/{rawType}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<QuestionnaireDto> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
         ConveyorType type = ConveyorType.safeValueOf(rawType);
 
@@ -47,7 +48,7 @@ public class QuestionnaireController {
         return ResponseEntity.ok(questionnaire);
     }
 
-    @PostMapping
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<QuestionnaireDto> deployNewQuestionnaire(@Valid @RequestBody QuestionnaireDto body) {
         QuestionnaireDto newBody = mapper.toDto(detailService.save(mapper.toEntity(body)));
         URI location = ServletUriComponentsBuilder

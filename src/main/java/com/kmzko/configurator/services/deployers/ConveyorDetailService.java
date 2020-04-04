@@ -1,6 +1,7 @@
 package com.kmzko.configurator.services.deployers;
 
 import com.kmzko.configurator.domains.conveyor.Conveyor;
+import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.repositories.ConveyorRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,10 @@ public class ConveyorDetailService implements DetailService<Conveyor> {
 
     public ConveyorDetailService(ConveyorRepo conveyorRepo) {
         this.conveyorRepo = conveyorRepo;
+    }
+
+    public Conveyor getConveyorTemplate(ConveyorType type) {
+        return conveyorRepo.getTemplate(type);
     }
 
     @Override

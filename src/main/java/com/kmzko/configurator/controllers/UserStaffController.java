@@ -10,6 +10,7 @@ import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
 import com.kmzko.configurator.services.deployers.PersonalConveyorDetailService;
 import com.kmzko.configurator.services.deployers.PersonalQuestionnaireDetailService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,13 +40,13 @@ public class UserStaffController {
         this.questionnaireMapper = questionnaireMapper;
     }
 
-    @GetMapping(value = "/conveyors", produces = "application/json")
+    @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors() {
         return ResponseEntity.ok(personalConveyorService.getAll().stream().map(conveyorMapper::toDto)
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping(value = "/conveyors/{id}", produces = "application/json")
+    @GetMapping(value = "/conveyors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> getUserConveyor(@PathVariable long id) {
         Optional<PersonalConveyor> conveyor = personalConveyorService.getById(id);
 
@@ -57,7 +58,7 @@ public class UserStaffController {
         }
     }
 
-    @PostMapping(value = "/conveyors", produces = "application/json")
+    @PostMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> saveUserConveyor(@Valid @RequestBody PersonalConveyorDto body) {
         // TODO
         UserDto user = new UserDto("123", "123", "123", new HashSet<>());
@@ -66,7 +67,7 @@ public class UserStaffController {
         return createConveyor(body);
     }
 
-    @PutMapping(value = "/conveyors/{id}", produces = "application/json")
+    @PutMapping(value = "/conveyors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> changeUserConveyor(@Valid @RequestBody PersonalConveyorDto body,
                                                                @PathVariable long id) {
         Optional<PersonalConveyor> conveyor = personalConveyorService.getById(id);
@@ -81,7 +82,7 @@ public class UserStaffController {
         }
     }
 
-    @PatchMapping(value = "/conveyors/{id}", produces = "application/json")
+    @PatchMapping(value = "/conveyors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> patchUserConveyor(@PathVariable Long id, @RequestBody Map<Object, Object> fields) {
         Optional<PersonalConveyor> conveyor = personalConveyorService.getById(id);
 
@@ -121,13 +122,13 @@ public class UserStaffController {
                 .body(newBody);
     }
 
-    @GetMapping(value = "/questionnaires", produces = "application/json")
+    @GetMapping(value = "/questionnaires", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PersonalQuestionnaireDto>> getUserQuestionnaires() {
         return ResponseEntity.ok(personalQuestionnaireService.getAll().stream().map(questionnaireMapper::toDto)
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping(value = "/questionnaires/{id}", produces = "application/json")
+    @GetMapping(value = "/questionnaires/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalQuestionnaireDto> getUserQuestionnaire(@PathVariable long id) {
         Optional<PersonalQuestionnaire> questionnaire = personalQuestionnaireService.getById(id);
 
@@ -139,7 +140,7 @@ public class UserStaffController {
         }
     }
 
-    @PostMapping(value = "/questionnaires", produces = "application/json")
+    @PostMapping(value = "/questionnaires", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalQuestionnaireDto> saveUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body) {
         PersonalQuestionnaireDto newBody = questionnaireMapper.toDto(personalQuestionnaireService.save(questionnaireMapper.toEntity(body)));
 
@@ -153,7 +154,7 @@ public class UserStaffController {
                 .body(newBody);
     }
 
-    @PutMapping(value = "/questionnaires/{id}", produces = "application/json")
+    @PutMapping(value = "/questionnaires/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalQuestionnaireDto> changeUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body,
                                                                          @PathVariable long id) {
         return null;

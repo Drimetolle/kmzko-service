@@ -4,6 +4,7 @@ import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.dto.OptionalDetailDto;
 import com.kmzko.configurator.mappers.OptionalDetailMapper;
 import com.kmzko.configurator.services.KmzkoService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class OptionalDetailController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "/", produces = "application/json")
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<OptionalDetailDto>> getOptions(@RequestParam ConveyorType type) {
         return ResponseEntity.ok(service.getOptions(type).stream().map(mapper::toDto).collect(Collectors.toList()));
     }
