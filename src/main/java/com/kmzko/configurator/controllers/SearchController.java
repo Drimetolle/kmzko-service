@@ -26,7 +26,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ConveyorDto>> searchConveyors(@RequestParam Map<String,String> allParams) {
+    public ResponseEntity<List<ConveyorDto>> searchByConveyors(@RequestParam Map<String,String> allParams) {
         List<Rate> payload = allParams.keySet().stream()
                 .map(i -> new Rate("", allParams.get(i), i)).collect(Collectors.toList());
         List<Conveyor> conveyors = service.getNearConveyors(payload);

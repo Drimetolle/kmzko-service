@@ -18,7 +18,7 @@ public class ConveyorController {
         this.detailService = detailService;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/template/{rawType}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Conveyor> getConveyorTemplate(@PathVariable String rawType) {
         ConveyorType type = ConveyorType.safeValueOf(rawType);
 
