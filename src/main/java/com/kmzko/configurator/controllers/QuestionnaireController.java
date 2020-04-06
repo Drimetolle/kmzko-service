@@ -3,7 +3,7 @@ package com.kmzko.configurator.controllers;
 import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.dto.QuestionnaireDto;
 import com.kmzko.configurator.mappers.QuestionnaireMapper;
-import com.kmzko.configurator.services.deployers.QuestionnaireDetailService;
+import com.kmzko.configurator.services.detailService.QuestionnaireDetailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

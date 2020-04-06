@@ -1,4 +1,4 @@
-package com.kmzko.configurator.services.deployers;
+package com.kmzko.configurator.services.detailService;
 
 import java.util.List;
 import java.util.Optional;

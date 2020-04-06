@@ -2,14 +2,13 @@ package com.kmzko.configurator.controllers;
 
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
-import com.kmzko.configurator.dto.RoleDto;
 import com.kmzko.configurator.dto.UserDto;
 import com.kmzko.configurator.entity.user.PersonalConveyor;
 import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
-import com.kmzko.configurator.services.deployers.PersonalConveyorDetailService;
-import com.kmzko.configurator.services.deployers.PersonalQuestionnaireDetailService;
+import com.kmzko.configurator.services.detailService.PersonalConveyorDetailService;
+import com.kmzko.configurator.services.detailService.PersonalQuestionnaireDetailService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;

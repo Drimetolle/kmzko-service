@@ -1,8 +1,7 @@
-package com.kmzko.configurator.services.deployers;
+package com.kmzko.configurator.services.detailService;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
-import com.kmzko.configurator.domains.questionnaire.Questionnaire;
-import com.kmzko.configurator.repositories.QuestionnaireRepo;
+import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.repositories.PersonalQuestionnaireRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -10,39 +9,35 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class QuestionnaireDetailService implements DetailService<Questionnaire> {
-    private final QuestionnaireRepo questionnaireRepo;
+public class PersonalQuestionnaireDetailService implements DetailService<PersonalQuestionnaire> {
+    private final PersonalQuestionnaireRepo questionnaireRepo;
 
-    public QuestionnaireDetailService(QuestionnaireRepo questionnaireRepo) {
+    public PersonalQuestionnaireDetailService(PersonalQuestionnaireRepo questionnaireRepo) {
         this.questionnaireRepo = questionnaireRepo;
     }
 
-    public Questionnaire getLastRevisionQuestionnaire(ConveyorType type) {
-        return questionnaireRepo.findLatestRecord(type.getValue());
-    }
-
     @Override
-    public List<Questionnaire> getAll() {
+    public List<PersonalQuestionnaire> getAll() {
         return questionnaireRepo.findAll();
     }
 
     @Override
-    public Optional<Questionnaire> getById(long id) {
+    public Optional<PersonalQuestionnaire> getById(long id) {
         return questionnaireRepo.findById(id);
     }
 
     @Override
-    public Questionnaire save(Questionnaire questionnaire) {
+    public PersonalQuestionnaire save(PersonalQuestionnaire questionnaire) {
         return questionnaireRepo.save(questionnaire);
     }
 
     @Override
-    public Questionnaire update(Questionnaire questionnaire) {
+    public PersonalQuestionnaire update(PersonalQuestionnaire personalQuestionnaire) {
         return null;
     }
 
     @Override
-    public boolean delete(Questionnaire questionnaire) {
+    public boolean delete(PersonalQuestionnaire questionnaire) {
         try {
             questionnaireRepo.delete(questionnaire);
         }
