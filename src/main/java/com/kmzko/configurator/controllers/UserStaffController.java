@@ -60,7 +60,7 @@ public class UserStaffController {
     @PostMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> saveUserConveyor(@Valid @RequestBody PersonalConveyorDto body) {
         // TODO
-        UserDto user = new UserDto("123", "123", "123", new HashSet<>());
+        UserDto user = new UserDto("123", "123", "123", "name", new HashSet<>());
         user.setId(Long.valueOf(1));
         body.setUser(user);
         return createConveyor(body);

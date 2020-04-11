@@ -44,7 +44,7 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void createUser() throws Exception {
-        UserDto userDto = new UserDto("fasf", "asfafs", "qwrfqw", new HashSet<>());
+        UserDto userDto = new UserDto("fasf", "asfafs", "qwrfqw","123", new HashSet<>());
         mvc.perform(MockMvcRequestBuilders.post(baseUrl).contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userDto)))
                 .andDo(print())
@@ -67,7 +67,7 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void createZeroLengthFieldUser() throws Exception {
-        UserDto userDto = new UserDto("", "", "", new HashSet<>());
+        UserDto userDto = new UserDto("", "", "","", new HashSet<>());
         mvc.perform(MockMvcRequestBuilders.post(baseUrl).contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userDto)))
                 .andDo(print())
@@ -78,8 +78,8 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void createUserIfEmailExist() throws Exception {
-        UserDto userDto = new UserDto("1", "1", "1", new HashSet<>());
-        UserDto secondUserDto = new UserDto("1", "2", "2", new HashSet<>());
+        UserDto userDto = new UserDto("1", "1", "1","", new HashSet<>());
+        UserDto secondUserDto = new UserDto("1", "2", "2","", new HashSet<>());
         repo.save(mapper.toEntity(userDto));
 
         mvc.perform(MockMvcRequestBuilders.post(baseUrl).contentType(MediaType.APPLICATION_JSON)

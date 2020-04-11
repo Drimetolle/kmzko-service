@@ -19,9 +19,13 @@ import java.util.UUID;
 public class User extends AbstractEntity {
     @Column(nullable=false, unique=true)
     private String email;
+    private String username;
     private String name = "user";
     private String password = UUID.randomUUID().toString();
-    @ManyToMany
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

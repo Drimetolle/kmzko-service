@@ -25,6 +25,9 @@ public class UserDto extends AbstractDto implements UserDetails {
     @NotNull
     @NotEmpty
     private String password;
+    @NotNull
+    @NotEmpty
+    private String username;
     private Set<RoleDto> roles;
 
     @Override
