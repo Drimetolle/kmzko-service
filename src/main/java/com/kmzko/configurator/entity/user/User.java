@@ -1,6 +1,7 @@
 package com.kmzko.configurator.entity.user;
 
 import com.kmzko.configurator.entity.AbstractEntity;
+import com.kmzko.configurator.entity.Session;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +33,6 @@ public class User extends AbstractEntity {
     private Set<PersonalConveyor> conveyors;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<PersonalQuestionnaire> questionnaires;
+    @OneToOne(mappedBy = "user")
+    private Session session;
 }

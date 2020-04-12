@@ -13,18 +13,17 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
     @Value("${jwt.token.secret}")
     private String secret;
-    @Value("${jwt.token.expired}")
-    private long validTime;
+    @Value("${jwt.access.expired}")
+    private long iat;
+    @Value("${jwt.refresh.expired}")
+    private long iatRefresh;
 
     private final UserDetailsService userDetailsService;
 
@@ -38,18 +37,34 @@ public class JwtTokenProvider {
     }
 
     public String createToken(User user) {
+        Date now = new Date();
+        Date timeOfDeath = new Date(now.getTime() + iat);
+
+        return Jwts.builder()
+                .setHeaderParam("typ","JWT")
+                .setClaims(claim(user))
+                .setIssuedAt(now)
+                .setExpiration(timeOfDeath)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
+    public String createRefreshToken(User user) {
+        Date now = new Date();
+        Date timeOfDeath = new Date(now.getTime() + iatRefresh);
+        return Jwts.builder()
+                .setHeaderParam("typ","JWT")
+                .setIssuedAt(now)
+                .setExpiration(timeOfDeath)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
+    private Claims claim(User user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("roles", getRoleNames(user.getRoles()));
 
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validTime);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
+        return claims;
     }
 
     public Authentication getAuthentication(String token) {
@@ -62,9 +77,9 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null) {
-            return bearerToken;
+        String token = req.getHeader("Authorization");
+        if (token != null) {
+            return token;
         }
         return null;
     }

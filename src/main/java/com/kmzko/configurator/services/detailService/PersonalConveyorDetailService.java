@@ -16,6 +16,10 @@ public class PersonalConveyorDetailService implements DetailService<PersonalConv
         this.conveyorRepo = conveyorRepo;
     }
 
+    public List<PersonalConveyor> findById(Long id) {
+        return conveyorRepo.findAllById(id);
+    }
+
     @Override
     public List<PersonalConveyor> getAll() {
         return conveyorRepo.findAll();

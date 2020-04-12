@@ -1,4 +1,4 @@
-package com.kmzko.configurator.dto;
+package com.kmzko.configurator.dto.auth;
 
 import lombok.Data;
 

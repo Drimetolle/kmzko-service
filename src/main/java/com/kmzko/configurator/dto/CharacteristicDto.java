@@ -6,8 +6,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class CharacteristicDto extends AbstractDto {
     private String name;
     private String value;

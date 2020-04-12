@@ -7,17 +7,23 @@ import com.kmzko.configurator.entity.user.PersonalConveyor;
 import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
+import com.kmzko.configurator.security.jwt.JwtUser;
 import com.kmzko.configurator.services.detailService.PersonalConveyorDetailService;
 import com.kmzko.configurator.services.detailService.PersonalQuestionnaireDetailService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,8 +46,9 @@ public class UserStaffController {
     }
 
     @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors() {
-        return ResponseEntity.ok(personalConveyorService.getAll().stream().map(conveyorMapper::toDto)
+    public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors(Authentication authentication) {
+        JwtUser user = (JwtUser) authentication.getPrincipal();
+        return ResponseEntity.ok(personalConveyorService.findById(user.getId()).stream().map(conveyorMapper::toDto)
                 .collect(Collectors.toList()));
     }
 

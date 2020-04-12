@@ -1,55 +1,49 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.dto.AuthenticationRequestDto;
-import com.kmzko.configurator.entity.user.User;
-import com.kmzko.configurator.security.jwt.JwtTokenProvider;
-import com.kmzko.configurator.services.detailService.UserService;
+import com.kmzko.configurator.dto.auth.AuthTokenDto;
+import com.kmzko.configurator.dto.auth.AuthenticationRequestDto;
+import com.kmzko.configurator.exeption.InvalidRefreshTokenException;
+import com.kmzko.configurator.services.AuthorizationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class AuthorizationController {
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserService userService;
+    private final AuthorizationService authorizationService;
 
-    public AuthorizationController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public AuthorizationController(AuthenticationManager authenticationManager, AuthorizationService authorizationService) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userService = userService;
+        this.authorizationService = authorizationService;
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<Object, Object>> login(@RequestBody AuthenticationRequestDto bodyAuth) {
+    public ResponseEntity<AuthTokenDto> login(@RequestBody AuthenticationRequestDto bodyAuth) {
         try {
-            String username = bodyAuth.getUsername();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, bodyAuth.getPassword()));
-            User user = userService.findByUsername(username);
-
-            if (user == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
-
-            String token = jwtTokenProvider.createToken(user);
-
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", username);
-            response.put("token", token);
-
-            return ResponseEntity.ok(response);
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(bodyAuth.getUsername(), bodyAuth.getPassword()));
+            AuthTokenDto tokens = authorizationService.generateTokenPair(bodyAuth.getUsername());
+            return ResponseEntity.ok(tokens);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
+        }
+    }
+
+    @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AuthTokenDto> login(@RequestBody AuthTokenDto bodyAuth) {
+        try {
+            AuthTokenDto tokens = authorizationService.refreshTokens(bodyAuth.getAccess_token(), bodyAuth.getRefresh_token());
+            return ResponseEntity.ok(tokens);
+        }
+        catch (InvalidRefreshTokenException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }
