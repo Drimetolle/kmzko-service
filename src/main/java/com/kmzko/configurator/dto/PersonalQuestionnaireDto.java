@@ -9,8 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class PersonalQuestionnaireDto extends AbstractDto {
     private String name;
     private String type;

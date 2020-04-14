@@ -37,7 +37,7 @@ public class AuthorizationService {
     }
 
     public AuthTokenDto refreshTokens(String accessToken, String refreshToken) {
-        String username = jwtTokenProvider.getUsername(accessToken);
+        String username = jwtTokenProvider.getUsernameWithoutCheckExpired(accessToken);
         User user = userService.findByUsername(username);
 
         if (!jwtTokenProvider.validateToken(refreshToken)) {

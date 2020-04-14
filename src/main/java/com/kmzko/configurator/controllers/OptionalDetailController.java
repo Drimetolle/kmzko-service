@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/options")
-@CrossOrigin(origins = "*")
 public class OptionalDetailController {
     private final KmzkoService service;
     private final OptionalDetailMapper mapper;

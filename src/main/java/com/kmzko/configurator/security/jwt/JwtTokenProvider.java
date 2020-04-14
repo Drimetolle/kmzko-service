@@ -1,9 +1,12 @@
 package com.kmzko.configurator.security.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kmzko.configurator.entity.user.Role;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.security.JwtUserDetailService;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.DefaultClaims;
+import io.jsonwebtoken.impl.TextCodec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,6 +79,28 @@ public class JwtTokenProvider {
 
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getUsernameWithoutCheckExpired(String token) {
+        return customParser(token);
+    }
+
+    private String customParser(String token) {
+        try {
+            String[] a = token.split("[.]+");
+            String base64UrlEncodedPayload = a[1];
+            String payload = TextCodec.BASE64URL.decodeToString(base64UrlEncodedPayload);
+            Claims claims = null;
+            if (payload.charAt(0) == '{' && payload.charAt(payload.length() - 1) == '}') {
+                Map<String, Object> claimsMap = new ObjectMapper().readValue(payload, Map.class);
+                claims = new DefaultClaims(claimsMap);
+            }
+
+            return claims.getSubject();
+        }
+        catch (Exception ex) {
+            throw new SignatureException("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.");
+        }
     }
 
     public String resolveToken(HttpServletRequest req) {

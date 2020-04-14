@@ -14,7 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/join")
-@CrossOrigin(origins = "*")
 public class RegistrationController {
     private final UserService userService;
     private final UserMapper mapper;

@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/questionnaires")
-@CrossOrigin(origins = "*")
 public class QuestionnaireController {
     private final QuestionnaireDetailService detailService;
     private final QuestionnaireMapper mapper;
@@ -26,6 +25,11 @@ public class QuestionnaireController {
     public QuestionnaireController(QuestionnaireDetailService detailService, QuestionnaireMapper mapper) {
         this.detailService = detailService;
         this.mapper = mapper;
+    }
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<QuestionnaireDto>> getQuestionnaires() {
+        return ResponseEntity.ok(detailService.getAll().stream().map(mapper::toDto).collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)

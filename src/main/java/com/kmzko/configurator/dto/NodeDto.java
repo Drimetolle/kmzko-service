@@ -8,8 +8,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class NodeDto extends AbstractDto {
     private String name;
     private List<DetailDto> details;

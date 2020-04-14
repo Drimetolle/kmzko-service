@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/purchase")
-@CrossOrigin(origins = "*")
 public class PurchaseController {
 
 }

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/details")
-@CrossOrigin(origins = "*")
 public class DetailController {
     private final ComponentDetailService service;
     private final DetailMapper mapper;

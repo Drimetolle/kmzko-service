@@ -1,11 +1,12 @@
 package com.kmzko.configurator.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
@@ -13,20 +14,10 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class UserDto extends AbstractDto implements UserDetails {
-    @NotNull
-    @NotEmpty
     private String email;
-    @NotNull
-    @NotEmpty
     private String name;
-    @NotNull
-    @NotEmpty
     private String password;
-    @NotNull
-    @NotEmpty
     private String username;
     private Set<RoleDto> roles;
 

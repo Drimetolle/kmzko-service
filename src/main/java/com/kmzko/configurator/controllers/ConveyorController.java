@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/conveyors")
-@CrossOrigin(origins = "*")
 public class ConveyorController {
     private final ConveyorDetailService detailService;
 

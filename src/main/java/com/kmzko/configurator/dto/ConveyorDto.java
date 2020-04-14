@@ -8,8 +8,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class ConveyorDto extends AbstractDto {
     private String name;
     private String type;
