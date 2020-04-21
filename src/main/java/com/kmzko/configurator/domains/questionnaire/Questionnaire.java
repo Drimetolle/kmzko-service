@@ -21,7 +21,8 @@ public class Questionnaire extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private ConveyorType type;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "questionnaire_id", nullable=false)
     private List<Rate> rateList;
 
     public Questionnaire(List<Rate> rateList, ConveyorType type) {

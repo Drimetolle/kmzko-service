@@ -24,24 +24,24 @@
                 <entry key="dust" value="1"/>
             </map>
         </constructor-arg>
-        <constructor-arg>
-            <set>
-                <value>tape-width</value>
-                <value>tape-length</value>
-                <value>productivity</value>
-                <value>tilt-angle</value>
-                <value>tape-speed</value>
-                <value>bulk</value>
-                <value>grading</value>
-                <value>fraction</value>
-                <value>moisture</value>
-                <value>temperature-cargo</value>
-                <value>conveyor-control-system</value>
-                <value>installation-chief</value>
-                <value>temperature-range</value>
-                <value>humidity-air</value>
-                <value>dust</value>
-            </set>
-        </constructor-arg>
+<!--        <constructor-arg>-->
+<!--            <set>-->
+<!--                <value>tape-width</value>-->
+<!--                <value>tape-length</value>-->
+<!--                <value>productivity</value>-->
+<!--                <value>tilt-angle</value>-->
+<!--                <value>tape-speed</value>-->
+<!--                <value>bulk</value>-->
+<!--                <value>grading</value>-->
+<!--                <value>fraction</value>-->
+<!--                <value>moisture</value>-->
+<!--                <value>temperature-cargo</value>-->
+<!--                <value>conveyor-control-system</value>-->
+<!--                <value>installation-chief</value>-->
+<!--                <value>temperature-range</value>-->
+<!--                <value>humidity-air</value>-->
+<!--                <value>dust</value>-->
+<!--            </set>-->
+<!--        </constructor-arg>-->
     </bean>
 </beans>

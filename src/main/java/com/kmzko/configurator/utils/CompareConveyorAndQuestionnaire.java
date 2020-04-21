@@ -1,14 +1,13 @@
 package com.kmzko.configurator.utils;
 
-import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Characteristic;
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.conveyor.Detail;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -16,7 +15,6 @@ public class CompareConveyorAndQuestionnaire {
     private final int bound;
     private final float interval;
     private final Map<String, Float> rates;
-    private final Set<String> nodeMarks;
 
     public boolean proximity(Conveyor conveyor, List<Rate> rates) {
         List<Detail> details = conveyor.getNodes().stream()
@@ -56,17 +54,6 @@ public class CompareConveyorAndQuestionnaire {
         }
         catch (NumberFormatException e) {
             return r1.equals(r2);
-        }
-    }
-
-    private boolean compareTwoRate(float r1, String r2) {
-        try {
-            float r2Number = Float.parseFloat(r2);
-
-            return inRangeNumber(r1, r2Number);
-        }
-        catch (NumberFormatException e) {
-            return String.valueOf(r1).equals(r2);
         }
     }
 

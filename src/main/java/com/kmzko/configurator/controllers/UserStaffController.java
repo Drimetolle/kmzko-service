@@ -1,15 +1,18 @@
 package com.kmzko.configurator.controllers;
 
+import com.kmzko.configurator.domains.questionnaire.Questionnaire;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
 import com.kmzko.configurator.dto.UserDto;
 import com.kmzko.configurator.entity.user.PersonalConveyor;
 import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
 import com.kmzko.configurator.security.jwt.JwtUser;
 import com.kmzko.configurator.services.detailService.PersonalConveyorDetailService;
 import com.kmzko.configurator.services.detailService.PersonalQuestionnaireDetailService;
+import com.kmzko.configurator.services.detailService.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,19 +36,21 @@ public class UserStaffController {
     private final PersonalQuestionnaireDetailService personalQuestionnaireService;
     private final PersonalConveyorMapper conveyorMapper;
     private final PersonalQuestionnaireMapper questionnaireMapper;
+    private final UserService userService;
 
     public UserStaffController(PersonalConveyorDetailService personalConveyorService,
                                PersonalQuestionnaireDetailService personalQuestionnaireService,
-                               PersonalConveyorMapper conveyorMapper, PersonalQuestionnaireMapper questionnaireMapper) {
+                               PersonalConveyorMapper conveyorMapper, PersonalQuestionnaireMapper questionnaireMapper, UserService userService) {
         this.personalConveyorService = personalConveyorService;
         this.personalQuestionnaireService = personalQuestionnaireService;
         this.conveyorMapper = conveyorMapper;
         this.questionnaireMapper = questionnaireMapper;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors(Authentication authentication) {
-        JwtUser user = (JwtUser) authentication.getPrincipal();
+        User user = convertAuthenticationToUser(authentication);
         return ResponseEntity.ok(personalConveyorService.findById(user.getId()).stream().map(conveyorMapper::toDto)
                 .collect(Collectors.toList()));
     }
@@ -145,8 +150,13 @@ public class UserStaffController {
     }
 
     @PostMapping(value = "/questionnaires", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonalQuestionnaireDto> saveUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body) {
-        PersonalQuestionnaireDto newBody = questionnaireMapper.toDto(personalQuestionnaireService.save(questionnaireMapper.toEntity(body)));
+    public ResponseEntity<PersonalQuestionnaireDto> saveUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body,
+                                                                          Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        PersonalQuestionnaire questionnaire = questionnaireMapper.toEntity(body);
+        questionnaire.setUser(user);
+
+        PersonalQuestionnaireDto newBody = questionnaireMapper.toDto(personalQuestionnaireService.save(questionnaire));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -160,8 +170,21 @@ public class UserStaffController {
 
     @PutMapping(value = "/questionnaires/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalQuestionnaireDto> changeUserQuestionnaire(@Valid @RequestBody PersonalQuestionnaireDto body,
-                                                                         @PathVariable long id) {
-        return null;
+                                                                         @PathVariable long id, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+
+        Optional<PersonalQuestionnaire> questionnaire = userService.getAllUserQuestionnaires(user.getId()).stream()
+                .filter(q -> q.getId() == id).findFirst();
+
+        if (questionnaire.isPresent()) {
+            PersonalQuestionnaire newQuestionnaire = questionnaireMapper.toEntity(body);
+            newQuestionnaire.setId(questionnaire.get().getId());
+            newQuestionnaire.setUser(user);
+            return ResponseEntity.ok(questionnaireMapper.toDto(personalQuestionnaireService.save(newQuestionnaire)));
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @DeleteMapping(value = "/questionnaires/{id}")
@@ -169,5 +192,10 @@ public class UserStaffController {
         if (!personalQuestionnaireService.deleteById(id))
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().build();
+    }
+
+    private User convertAuthenticationToUser(Authentication authentication) {
+        JwtUser jwtUser =(JwtUser) authentication.getPrincipal();
+        return userService.findByUsername(jwtUser.getUsername());
     }
 }

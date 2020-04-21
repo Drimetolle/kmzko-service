@@ -1,5 +1,7 @@
 package com.kmzko.configurator.services.detailService;
 
+import com.kmzko.configurator.entity.user.PersonalConveyor;
+import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.Role;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.exeption.EmailExist;
@@ -7,12 +9,12 @@ import com.kmzko.configurator.repositories.RoleRepo;
 import com.kmzko.configurator.repositories.UserRepo;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService implements DetailService<User> {
@@ -46,7 +48,6 @@ public class UserService implements DetailService<User> {
     private User createNewUser(User user) throws EmailExist {
         Role role = roleRepository.findByName("ROLE_USER");
         user.setRoles(new HashSet<Role>() {{ add(role); }});
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try {
             return userRepository.save(user);
@@ -81,5 +82,13 @@ public class UserService implements DetailService<User> {
             return false;
         }
         return true;
+    }
+
+    public Set<PersonalConveyor> getAllUserConveyors(long id) {
+        return userRepository.findById(id).get().getConveyors();
+    }
+
+    public Set<PersonalQuestionnaire> getAllUserQuestionnaires(long id) {
+        return userRepository.findById(id).get().getQuestionnaires();
     }
 }

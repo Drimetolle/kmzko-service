@@ -23,7 +23,7 @@ public class RegistrationController {
         this.mapper = mapper;
     }
 
-    @PostMapping(value = "",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> createUser(@Valid @RequestBody UserDto user) {
         try {
             userService.save(mapper.toEntity(user));
