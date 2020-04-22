@@ -1,9 +1,7 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.domains.questionnaire.Questionnaire;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
-import com.kmzko.configurator.dto.UserDto;
 import com.kmzko.configurator.entity.user.PersonalConveyor;
 import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.User;
@@ -16,48 +14,46 @@ import com.kmzko.configurator.services.detailService.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.lang.reflect.Field;
 import java.net.URI;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserStaffController {
-    private final PersonalConveyorDetailService personalConveyorService;
-    private final PersonalQuestionnaireDetailService personalQuestionnaireService;
     private final PersonalConveyorMapper conveyorMapper;
     private final PersonalQuestionnaireMapper questionnaireMapper;
     private final UserService userService;
+    private final PersonalConveyorDetailService personalConveyorService;
+    private final PersonalQuestionnaireDetailService personalQuestionnaireService;
 
-    public UserStaffController(PersonalConveyorDetailService personalConveyorService,
-                               PersonalQuestionnaireDetailService personalQuestionnaireService,
-                               PersonalConveyorMapper conveyorMapper, PersonalQuestionnaireMapper questionnaireMapper, UserService userService) {
-        this.personalConveyorService = personalConveyorService;
-        this.personalQuestionnaireService = personalQuestionnaireService;
+    public UserStaffController(PersonalConveyorMapper conveyorMapper,
+                               PersonalQuestionnaireMapper questionnaireMapper, UserService userService,
+                               PersonalConveyorDetailService personalConveyorService,
+                               PersonalQuestionnaireDetailService personalQuestionnaireService) {
         this.conveyorMapper = conveyorMapper;
         this.questionnaireMapper = questionnaireMapper;
         this.userService = userService;
+        this.personalConveyorService = personalConveyorService;
+        this.personalQuestionnaireService = personalQuestionnaireService;
     }
 
     @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors(Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
-        return ResponseEntity.ok(personalConveyorService.findById(user.getId()).stream().map(conveyorMapper::toDto)
+        return ResponseEntity.ok(userService.getAllUserConveyors(user.getUsername()).stream().map(conveyorMapper::toDto)
                 .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/conveyors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonalConveyorDto> getUserConveyor(@PathVariable long id) {
-        Optional<PersonalConveyor> conveyor = personalConveyorService.getById(id);
+    public ResponseEntity<PersonalConveyorDto> getUserConveyor(@PathVariable long id, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        Optional<PersonalConveyor> conveyor = userService.getUserConveyorsById(id, user.getUsername());
 
         if (conveyor.isPresent()) {
             return ResponseEntity.ok(conveyorMapper.toDto(conveyor.get()));
@@ -68,42 +64,35 @@ public class UserStaffController {
     }
 
     @PostMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonalConveyorDto> saveUserConveyor(@Valid @RequestBody PersonalConveyorDto body) {
-        // TODO
-        UserDto user = new UserDto("123", "123", "123", "name", new HashSet<>());
-        user.setId(Long.valueOf(1));
-        body.setUser(user);
-        return createConveyor(body);
+    public ResponseEntity<PersonalConveyorDto> saveUserConveyor(@Valid @RequestBody PersonalConveyorDto body,
+                                                                Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        PersonalConveyor conveyor = conveyorMapper.toEntity(body);
+        conveyor.setUser(user);
+
+        PersonalConveyorDto newBody = conveyorMapper.toDto(personalConveyorService.save(conveyor));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newBody.getId())
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(newBody);
     }
 
     @PutMapping(value = "/conveyors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> changeUserConveyor(@Valid @RequestBody PersonalConveyorDto body,
-                                                               @PathVariable long id) {
-        Optional<PersonalConveyor> conveyor = personalConveyorService.getById(id);
+                                                               @PathVariable long id, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        Optional<PersonalConveyor> conveyor = userService.getAllUserConveyors(id).stream()
+                .filter(c -> c.getId() == id).findFirst();
 
         if (conveyor.isPresent()) {
             PersonalConveyor newConveyor = conveyorMapper.toEntity(body);
             newConveyor.setId(conveyor.get().getId());
-            return ResponseEntity.ok(conveyorMapper.toDto(personalConveyorService.save(newConveyor)));
-        }
-        else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-
-    @PatchMapping(value = "/conveyors/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonalConveyorDto> patchUserConveyor(@PathVariable Long id, @RequestBody Map<Object, Object> fields) {
-        Optional<PersonalConveyor> conveyor = personalConveyorService.getById(id);
-
-        if (conveyor.isPresent()) {
-            PersonalConveyor newConveyor = conveyor.get();
-            fields.forEach((k, v) -> {
-                // use reflection to get field k on manager and set it to value k
-                Field field = ReflectionUtils.findField(PersonalConveyorDto.class, (String) k);
-                ReflectionUtils.setField(field, newConveyor, v);
-            });
-
-            newConveyor.setId(newConveyor.getId());
+            newConveyor.setUser(user);
             return ResponseEntity.ok(conveyorMapper.toDto(personalConveyorService.save(newConveyor)));
         }
         else {
@@ -118,28 +107,19 @@ public class UserStaffController {
         return ResponseEntity.ok().build();
     }
 
-    private ResponseEntity<PersonalConveyorDto> createConveyor(PersonalConveyorDto conveyorDto) {
-        PersonalConveyorDto newBody = conveyorMapper.toDto(personalConveyorService.save(conveyorMapper.toEntity(conveyorDto)));
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newBody.getId())
-                .toUri();
-
-        return ResponseEntity.created(location)
-                .body(newBody);
-    }
-
     @GetMapping(value = "/questionnaires", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PersonalQuestionnaireDto>> getUserQuestionnaires() {
-        return ResponseEntity.ok(personalQuestionnaireService.getAll().stream().map(questionnaireMapper::toDto)
+    public ResponseEntity<List<PersonalQuestionnaireDto>> getUserQuestionnaires(Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        return ResponseEntity.ok(userService.getAllUserQuestionnaires(user.getUsername()).stream()
+                .map(questionnaireMapper::toDto)
                 .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/questionnaires/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonalQuestionnaireDto> getUserQuestionnaire(@PathVariable long id) {
-        Optional<PersonalQuestionnaire> questionnaire = personalQuestionnaireService.getById(id);
+    public ResponseEntity<PersonalQuestionnaireDto> getUserQuestionnaire(@PathVariable long id,
+                                                                         Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        Optional<PersonalQuestionnaire> questionnaire = userService.getUserQuestionnairesById(id, user.getUsername());
 
         if (questionnaire.isPresent()) {
             return ResponseEntity.ok(questionnaireMapper.toDto(questionnaire.get()));

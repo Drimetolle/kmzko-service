@@ -20,10 +20,16 @@ import java.util.Set;
 public class UserService implements DetailService<User> {
     private final UserRepo userRepository;
     private final RoleRepo roleRepository;
+    private final PersonalConveyorDetailService conveyorDetailService;
+    private final PersonalQuestionnaireDetailService questionnaireDetailService;
 
-    public UserService(UserRepo userRepository, RoleRepo roleRepository) {
+    public UserService(UserRepo userRepository, RoleRepo roleRepository,
+                       PersonalConveyorDetailService conveyorDetailService,
+                       PersonalQuestionnaireDetailService questionnaireDetailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.conveyorDetailService = conveyorDetailService;
+        this.questionnaireDetailService = questionnaireDetailService;
     }
 
     public User findByUsername(String username) {
@@ -85,10 +91,48 @@ public class UserService implements DetailService<User> {
     }
 
     public Set<PersonalConveyor> getAllUserConveyors(long id) {
-        return userRepository.findById(id).get().getConveyors();
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get().getConveyors();
+        }
+        else {
+            return new HashSet<>();
+        }
     }
 
     public Set<PersonalQuestionnaire> getAllUserQuestionnaires(long id) {
-        return userRepository.findById(id).get().getQuestionnaires();
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get().getQuestionnaires();
+        }
+        else {
+            return new HashSet<>();
+        }
+    }
+
+    public Set<PersonalConveyor> getAllUserConveyors(String name) {
+        return userRepository.findByUsername(name).getConveyors();
+    }
+
+    public Set<PersonalQuestionnaire> getAllUserQuestionnaires(String name) {
+        return userRepository.findByUsername(name).getQuestionnaires();
+    }
+
+    public Optional<PersonalConveyor> getUserConveyorsById(long id, String name) {
+        Optional<PersonalConveyor> result = conveyorDetailService.getById(id);
+        if (result.isPresent()) {
+            return result.get().getUser().getUsername().equals(name) ? result : Optional.empty();
+        }
+
+        return result;
+    }
+
+    public Optional<PersonalQuestionnaire> getUserQuestionnairesById(long id, String name) {
+        Optional<PersonalQuestionnaire> result = questionnaireDetailService.getById(id);
+        if (result.isPresent()) {
+            return result.get().getUser().getUsername().equals(name) ? result : Optional.empty();
+        }
+
+        return result;
     }
 }

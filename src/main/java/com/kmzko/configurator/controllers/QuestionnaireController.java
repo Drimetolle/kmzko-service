@@ -39,8 +39,8 @@ public class QuestionnaireController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/{rawType}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionnaireDto> getQuestionnaireByTypeConveyor(@PathVariable String rawType) {
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<QuestionnaireDto> getQuestionnaireByTypeConveyor(@RequestParam("type") String rawType) {
         ConveyorType type = ConveyorType.safeValueOf(rawType);
 
         if (type == null) {
