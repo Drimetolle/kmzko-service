@@ -1,13 +1,12 @@
 package com.kmzko.configurator.domains.conveyor;
 
-import com.kmzko.configurator.entity.AbstractEntity;
+import com.kmzko.configurator.entity.AbstractNode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -16,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Node extends AbstractEntity {
-    @NotNull
-    private String name;
-
+public class Node extends AbstractNode {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "node_id", nullable=false)
     private List<Detail> details;

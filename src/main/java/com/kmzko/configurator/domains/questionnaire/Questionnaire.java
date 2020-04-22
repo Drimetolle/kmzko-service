@@ -1,7 +1,6 @@
 package com.kmzko.configurator.domains.questionnaire;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
-import com.kmzko.configurator.entity.AbstractEntity;
+import com.kmzko.configurator.entity.AbstractConveyor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,17 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Questionnaire extends AbstractEntity {
-    private String name;
-    @Enumerated(EnumType.STRING)
-    private ConveyorType type;
-
+public class Questionnaire extends AbstractConveyor {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "questionnaire_id", nullable=false)
     private List<Rate> rateList;
-
-    public Questionnaire(List<Rate> rateList, ConveyorType type) {
-        this.rateList = rateList;
-        this.type = type;
-    }
 }
