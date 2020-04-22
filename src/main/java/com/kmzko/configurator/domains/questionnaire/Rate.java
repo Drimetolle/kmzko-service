@@ -1,5 +1,6 @@
 package com.kmzko.configurator.domains.questionnaire;
 
+import com.kmzko.configurator.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Rate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Rate extends AbstractEntity {
     private String name;
     private String value;
     private String mark;

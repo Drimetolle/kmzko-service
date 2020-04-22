@@ -27,11 +27,6 @@ public class QuestionnaireController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<QuestionnaireDto>> getQuestionnaires() {
-        return ResponseEntity.ok(detailService.getAll().stream().map(mapper::toDto).collect(Collectors.toList()));
-    }
-
     @GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getListOfConveyorType() {
         List<ConveyorType> types = Arrays.asList(ConveyorType.values());

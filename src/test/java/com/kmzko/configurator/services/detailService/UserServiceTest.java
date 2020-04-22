@@ -35,19 +35,19 @@ public class UserServiceTest {
 
     @AfterClass
     public static void setUpContext() {
-        User user = new User();
-        user.setUsername("user");
-        userService.save(user);
-
-        conveyorDetailService.save(new PersonalConveyor("conv1", ConveyorType.TAPE, new ArrayList<>(), user, new ArrayList<>()));
-        questionnaireDetailService.save(new PersonalQuestionnaire("ques1", ConveyorType.TAPE, new ArrayList<>(), user));
-
-        User secondUser = new User();
-        secondUser.setUsername("secondUser");
-        userService.save(secondUser);
-
-        conveyorDetailService.save(new PersonalConveyor("conv2", ConveyorType.TAPE, new ArrayList<>(), secondUser, new ArrayList<>()));
-        questionnaireDetailService.save(new PersonalQuestionnaire("ques2", ConveyorType.TAPE, new ArrayList<>(), secondUser));
+//        User user = new User();
+//        user.setUsername("user");
+//        userService.save(user);
+//
+//        conveyorDetailService.save(new PersonalConveyor("conv1", ConveyorType.TAPE, new ArrayList<>(), user, new ArrayList<>()));
+//        questionnaireDetailService.save(new PersonalQuestionnaire("ques1", ConveyorType.TAPE, new ArrayList<>(), user));
+//
+//        User secondUser = new User();
+//        secondUser.setUsername("secondUser");
+//        userService.save(secondUser);
+//
+////        conveyorDetailService.save(new PersonalConveyor("conv2", ConveyorType.TAPE, new ArrayList<>(), secondUser, new ArrayList<>()));
+//        questionnaireDetailService.save(new PersonalQuestionnaire("ques2", ConveyorType.TAPE, new ArrayList<>(), secondUser));
     }
 
     @Before

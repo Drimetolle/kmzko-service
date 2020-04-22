@@ -15,9 +15,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class PersonalRate extends AbstractEntity {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long id;
     private String name;
     private String value;
     private String mark;

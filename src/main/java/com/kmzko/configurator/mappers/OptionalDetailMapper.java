@@ -1,6 +1,6 @@
 package com.kmzko.configurator.mappers;
 
-import com.kmzko.configurator.domains.OptionalDetail;
+import com.kmzko.configurator.entity.user.OptionalDetail;
 import com.kmzko.configurator.dto.OptionalDetailDto;
 import org.springframework.stereotype.Component;
 

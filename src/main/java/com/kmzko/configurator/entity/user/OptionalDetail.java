@@ -1,4 +1,4 @@
-package com.kmzko.configurator.domains;
+package com.kmzko.configurator.entity.user;
 
 import com.kmzko.configurator.entity.AbstractEntity;
 import com.kmzko.configurator.entity.user.PersonalConveyor;
