@@ -1,9 +1,6 @@
 package com.kmzko.configurator.services.detailService;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
-import com.kmzko.configurator.domains.conveyor.Node;
-import com.kmzko.configurator.entity.user.PersonalConveyor;
-import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import com.kmzko.configurator.entity.user.User;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;

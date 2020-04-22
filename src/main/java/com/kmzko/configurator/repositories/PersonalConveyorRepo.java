@@ -1,6 +1,6 @@
 package com.kmzko.configurator.repositories;
 
-import com.kmzko.configurator.entity.user.PersonalConveyor;
+import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

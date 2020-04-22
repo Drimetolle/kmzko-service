@@ -1,7 +1,7 @@
 package com.kmzko.configurator.mappers;
 
 import com.kmzko.configurator.dto.PersonalConveyorDto;
-import com.kmzko.configurator.entity.user.PersonalConveyor;
+import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,6 @@
 package com.kmzko.configurator.services.detailService;
 
-import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.repositories.PersonalQuestionnaireRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;

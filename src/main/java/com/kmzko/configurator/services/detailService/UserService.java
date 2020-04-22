@@ -1,7 +1,7 @@
 package com.kmzko.configurator.services.detailService;
 
-import com.kmzko.configurator.entity.user.PersonalConveyor;
-import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
+import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.Role;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.exeption.EmailExist;

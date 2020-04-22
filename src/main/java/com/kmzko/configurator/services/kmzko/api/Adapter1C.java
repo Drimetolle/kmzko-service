@@ -2,7 +2,7 @@ package com.kmzko.configurator.services.kmzko.api;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kmzko.configurator.entity.user.OptionalDetail;
+import com.kmzko.configurator.entity.user.conveyor.OptionalDetail;
 import com.kmzko.configurator.domains.conveyor.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.domains.conveyor.Conveyor;

@@ -2,7 +2,7 @@ package com.kmzko.configurator.mappers;
 
 import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
 import com.kmzko.configurator.dto.RateDto;
-import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

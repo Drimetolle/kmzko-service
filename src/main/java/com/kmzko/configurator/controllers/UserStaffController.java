@@ -2,8 +2,8 @@ package com.kmzko.configurator.controllers;
 
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
-import com.kmzko.configurator.entity.user.PersonalConveyor;
-import com.kmzko.configurator.entity.user.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
+import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
