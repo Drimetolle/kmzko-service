@@ -1,10 +1,12 @@
 package com.kmzko.configurator.services.detailService;
 
+import com.kmzko.configurator.entity.Session;
+import com.kmzko.configurator.entity.user.Status;
 import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.Role;
 import com.kmzko.configurator.entity.user.User;
-import com.kmzko.configurator.exeption.EmailExist;
+import com.kmzko.configurator.exeption.EmailExistException;
 import com.kmzko.configurator.repositories.RoleRepo;
 import com.kmzko.configurator.repositories.UserRepo;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,6 +38,10 @@ public class UserService implements DetailService<User> {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
@@ -51,15 +57,16 @@ public class UserService implements DetailService<User> {
         return createNewUser(user);
     }
 
-    private User createNewUser(User user) throws EmailExist {
+    private User createNewUser(User user) throws EmailExistException {
         Role role = roleRepository.findByName("ROLE_USER");
         user.setRoles(new HashSet<Role>() {{ add(role); }});
+        user.setStatus(Status.ACTIVE);
 
         try {
             return userRepository.save(user);
         }
         catch (DataIntegrityViolationException e) {
-            throw new EmailExist("Email: " + user.getEmail() + " is exist");
+            throw new EmailExistException("Email: " + user.getEmail() + " is exist");
         }
     }
 
