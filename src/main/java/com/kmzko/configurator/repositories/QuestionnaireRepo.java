@@ -1,6 +1,6 @@
 package com.kmzko.configurator.repositories;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Questionnaire;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

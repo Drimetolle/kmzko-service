@@ -1,6 +1,6 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.QuestionnaireDto;
 import com.kmzko.configurator.mappers.QuestionnaireMapper;
 import com.kmzko.configurator.services.detailService.QuestionnaireDetailService;
@@ -12,8 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,16 +34,27 @@ public class QuestionnaireController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionnaireDto> getQuestionnaireByTypeConveyor(@RequestParam("type") String rawType) {
-        ConveyorType type = ConveyorType.safeValueOf(rawType);
+    public ResponseEntity<List<QuestionnaireDto>> getQuestionnaireByTypeConveyor(@RequestParam(name = "type") Optional<String> rawType) {
+        ConveyorType type;
+        if (rawType.isPresent()) {
+            type = ConveyorType.safeValueOf(rawType.get());
+            if (type == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
 
-        if (type == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            QuestionnaireDto questionnaire = mapper.toDto(detailService.getLastRevisionQuestionnaire(type));
+
+            if (questionnaire == null) {
+                return ResponseEntity.ok(new ArrayList<>());
+            }
+
+            return ResponseEntity.ok(Collections.singletonList(questionnaire));
         }
-
-        QuestionnaireDto questionnaire = mapper.toDto(detailService.getLastRevisionQuestionnaire(type));
-
-        return ResponseEntity.ok(questionnaire);
+        else {
+            List<QuestionnaireDto> questionnaireDtoList = detailService.getAll().stream()
+                    .map(mapper::toDto).collect(Collectors.toList());
+            return ResponseEntity.ok(questionnaireDtoList);
+        }
     }
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)

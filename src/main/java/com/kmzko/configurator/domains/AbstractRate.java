@@ -1,5 +1,6 @@
-package com.kmzko.configurator.entity;
+package com.kmzko.configurator.domains;
 
+import com.kmzko.configurator.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,15 +14,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class AbstractCharacteristic extends AbstractEntity {
+public abstract class AbstractRate extends AbstractEntity {
     @NotNull
     private String name;
 
+    @NotNull
     private String value;
 
     @NotNull
     private String mark;
-
-    @NotNull
-    private String type;
 }

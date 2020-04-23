@@ -44,7 +44,7 @@ public class UserStaffController {
     }
 
     @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors(Authentication authentication) {
+    public ResponseEntity<List<PersonalConveyorDto>> getUserConveyors(@RequestParam String latest, Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
         return ResponseEntity.ok(userService.getAllUserConveyors(user.getUsername()).stream().map(conveyorMapper::toDto)
                 .collect(Collectors.toList()));
@@ -108,7 +108,8 @@ public class UserStaffController {
     }
 
     @GetMapping(value = "/questionnaires", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PersonalQuestionnaireDto>> getUserQuestionnaires(Authentication authentication) {
+    public ResponseEntity<List<PersonalQuestionnaireDto>> getUserQuestionnaires(@RequestParam String latest,
+                                                                                Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
         return ResponseEntity.ok(userService.getAllUserQuestionnaires(user.getUsername()).stream()
                 .map(questionnaireMapper::toDto)

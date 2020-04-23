@@ -1,6 +1,6 @@
 package com.kmzko.configurator.domains.conveyor;
 
-import com.kmzko.configurator.entity.AbstractDetail;
+import com.kmzko.configurator.domains.AbstractDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

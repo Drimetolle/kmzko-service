@@ -1,6 +1,6 @@
 package com.kmzko.configurator.entity.user.questionnaire;
 
-import com.kmzko.configurator.entity.AbstractConveyor;
+import com.kmzko.configurator.domains.AbstractConveyor;
 import com.kmzko.configurator.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.OptionalDetailDto;
 import com.kmzko.configurator.mappers.OptionalDetailMapper;
 import com.kmzko.configurator.services.KmzkoService;

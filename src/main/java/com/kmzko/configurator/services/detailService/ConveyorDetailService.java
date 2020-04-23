@@ -1,7 +1,7 @@
 package com.kmzko.configurator.services.detailService;
 
 import com.kmzko.configurator.domains.conveyor.Conveyor;
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.repositories.ConveyorRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;

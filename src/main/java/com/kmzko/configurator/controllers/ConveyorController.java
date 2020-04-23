@@ -1,7 +1,7 @@
 package com.kmzko.configurator.controllers;
 
 import com.kmzko.configurator.domains.conveyor.Conveyor;
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.services.detailService.ConveyorDetailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

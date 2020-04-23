@@ -1,6 +1,6 @@
 package com.kmzko.configurator.mappers;
 
-import com.kmzko.configurator.domains.conveyor.ConveyorType;
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Questionnaire;
 import com.kmzko.configurator.dto.QuestionnaireDto;
 import org.modelmapper.ModelMapper;

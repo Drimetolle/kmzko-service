@@ -1,6 +1,6 @@
 package com.kmzko.configurator.entity.user.questionnaire;
 
-import com.kmzko.configurator.entity.AbstractRate;
+import com.kmzko.configurator.domains.AbstractRate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
