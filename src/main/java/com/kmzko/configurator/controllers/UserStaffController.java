@@ -1,5 +1,6 @@
 package com.kmzko.configurator.controllers;
 
+import com.kmzko.configurator.dto.BioDto;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
 import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
@@ -7,6 +8,7 @@ import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
+import com.kmzko.configurator.mappers.UserBioMapper;
 import com.kmzko.configurator.security.jwt.JwtUser;
 import com.kmzko.configurator.services.detailService.PersonalConveyorDetailService;
 import com.kmzko.configurator.services.detailService.PersonalQuestionnaireDetailService;
@@ -28,19 +30,40 @@ import java.util.stream.Collectors;
 public class UserStaffController {
     private final PersonalConveyorMapper conveyorMapper;
     private final PersonalQuestionnaireMapper questionnaireMapper;
+    private final UserBioMapper userBioMapper;
     private final UserService userService;
     private final PersonalConveyorDetailService personalConveyorService;
     private final PersonalQuestionnaireDetailService personalQuestionnaireService;
 
     public UserStaffController(PersonalConveyorMapper conveyorMapper,
-                               PersonalQuestionnaireMapper questionnaireMapper, UserService userService,
+                               PersonalQuestionnaireMapper questionnaireMapper, UserBioMapper userBioMapper,
+                               UserService userService,
                                PersonalConveyorDetailService personalConveyorService,
                                PersonalQuestionnaireDetailService personalQuestionnaireService) {
         this.conveyorMapper = conveyorMapper;
         this.questionnaireMapper = questionnaireMapper;
+        this.userBioMapper = userBioMapper;
         this.userService = userService;
         this.personalConveyorService = personalConveyorService;
         this.personalQuestionnaireService = personalQuestionnaireService;
+    }
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BioDto> getUser(Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        return ResponseEntity.ok(userBioMapper.toDto(user));
+    }
+
+    @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BioDto> editBioUser(@Valid @RequestBody BioDto body, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+
+        user = userService.findByUsername(user.getUsername());
+
+        user.setName(body.getName());
+        user.setEmail(body.getEmail());
+
+        return ResponseEntity.ok(userBioMapper.toDto(user));
     }
 
     @GetMapping(value = "/conveyors", produces = MediaType.APPLICATION_JSON_VALUE)
