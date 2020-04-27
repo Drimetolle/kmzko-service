@@ -24,11 +24,11 @@ public class User extends AbstractEntity {
     @Column(nullable=false, unique=true)
     private String email;
 
-    @Column(nullable=false, unique=true)
-    private String username;
-
     @NotNull
     private String name = "user";
+
+    @Column(nullable=false, unique=true)
+    private String username;
 
     @NotNull
     private String password = UUID.randomUUID().toString();

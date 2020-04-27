@@ -2,6 +2,7 @@ package com.kmzko.configurator.security.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -38,6 +39,9 @@ public class JwtTokenFilter extends GenericFilterBean {
         catch (JwtAuthenticationException ex) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
             return ;
+        }
+        catch (UsernameNotFoundException ex) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

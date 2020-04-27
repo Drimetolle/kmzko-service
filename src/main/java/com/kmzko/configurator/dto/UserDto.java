@@ -28,7 +28,7 @@ public class UserDto extends AbstractDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getName();
+        return this.username;
     }
 
     @Override

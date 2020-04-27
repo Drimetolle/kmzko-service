@@ -1,22 +1,20 @@
 package com.kmzko.configurator.services.detailService;
 
-import com.kmzko.configurator.entity.Session;
+import com.kmzko.configurator.entity.user.Role;
 import com.kmzko.configurator.entity.user.Status;
+import com.kmzko.configurator.entity.user.User;
+import com.kmzko.configurator.entity.user.UserRoles;
 import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
-import com.kmzko.configurator.entity.user.Role;
-import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.exeption.EmailExistException;
 import com.kmzko.configurator.repositories.RoleRepo;
 import com.kmzko.configurator.repositories.UserRepo;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService implements DetailService<User> {
@@ -24,14 +22,17 @@ public class UserService implements DetailService<User> {
     private final RoleRepo roleRepository;
     private final PersonalConveyorDetailService conveyorDetailService;
     private final PersonalQuestionnaireDetailService questionnaireDetailService;
+    private BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepo userRepository, RoleRepo roleRepository,
                        PersonalConveyorDetailService conveyorDetailService,
-                       PersonalQuestionnaireDetailService questionnaireDetailService) {
+                       PersonalQuestionnaireDetailService questionnaireDetailService,
+                       BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.conveyorDetailService = conveyorDetailService;
         this.questionnaireDetailService = questionnaireDetailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findByUsername(String username) {
@@ -58,8 +59,9 @@ public class UserService implements DetailService<User> {
     }
 
     private User createNewUser(User user) throws EmailExistException {
-        Role role = roleRepository.findByName("ROLE_USER");
-        user.setRoles(new HashSet<Role>() {{ add(role); }});
+        Role role = roleRepository.findByName(UserRoles.ROLE_USER.toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Collections.singleton(role));
         user.setStatus(Status.ACTIVE);
 
         try {
