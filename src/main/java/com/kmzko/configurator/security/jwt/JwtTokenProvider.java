@@ -17,9 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
