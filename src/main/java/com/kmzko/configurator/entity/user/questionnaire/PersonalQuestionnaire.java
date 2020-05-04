@@ -21,7 +21,6 @@ public class PersonalQuestionnaire extends AbstractConveyor {
     @JoinColumn(name = "questionnaire_id", nullable=false)
     private List<PersonalRate> rateList;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conveyor_project_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "questionnaire")
     private ConveyorProject conveyorProject;
 }

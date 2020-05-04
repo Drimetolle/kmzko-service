@@ -24,7 +24,6 @@ public class PersonalConveyor extends AbstractConveyor {
     @OneToMany(mappedBy = "conveyor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OptionalDetail> optionalDetails;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conveyor_project_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "conveyor")
     private ConveyorProject conveyorProject;
 }
