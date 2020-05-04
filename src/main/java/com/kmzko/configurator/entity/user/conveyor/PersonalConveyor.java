@@ -1,7 +1,7 @@
 package com.kmzko.configurator.entity.user.conveyor;
 
 import com.kmzko.configurator.domains.AbstractConveyor;
-import com.kmzko.configurator.entity.user.User;
+import com.kmzko.configurator.entity.user.ConveyorProject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public class PersonalConveyor extends AbstractConveyor {
     @OneToMany(mappedBy = "conveyor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OptionalDetail> optionalDetails;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conveyor_project_id", referencedColumnName = "id")
+    private ConveyorProject conveyorProject;
 }

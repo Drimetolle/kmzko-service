@@ -1,7 +1,7 @@
 package com.kmzko.configurator.entity.user.questionnaire;
 
 import com.kmzko.configurator.domains.AbstractConveyor;
-import com.kmzko.configurator.entity.user.User;
+import com.kmzko.configurator.entity.user.ConveyorProject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class PersonalQuestionnaire extends AbstractConveyor {
     @JoinColumn(name = "questionnaire_id", nullable=false)
     private List<PersonalRate> rateList;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conveyor_project_id", referencedColumnName = "id")
+    private ConveyorProject conveyorProject;
 }

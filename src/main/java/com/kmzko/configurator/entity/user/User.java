@@ -2,8 +2,6 @@ package com.kmzko.configurator.entity.user;
 
 import com.kmzko.configurator.entity.AbstractEntity;
 import com.kmzko.configurator.entity.Session;
-import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
-import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,12 +38,9 @@ public class User extends AbstractEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<PersonalConveyor> conveyors;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<PersonalQuestionnaire> questionnaires;
-
     @OneToOne(mappedBy = "user")
     private Session session;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ConveyorProject> conveyorProject;
 }

@@ -52,9 +52,7 @@ public class UserServiceTest {
 
     @Test
     public void getAllUserConveyors() {
-        Set<PersonalConveyor> conveyors = userService.getAllUserConveyors(globalUser.getUsername());
 
-        assertEquals(conveyors.size(), 1);
     }
 
     @Test
