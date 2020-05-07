@@ -1,13 +1,10 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.dto.SessionDto;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.security.jwt.JwtUser;
 import com.kmzko.configurator.services.detailService.UserService;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +19,7 @@ public class SessionController {
 
     private User convertAuthenticationToUser(Authentication authentication) {
         JwtUser jwtUser =(JwtUser) authentication.getPrincipal();
-        return userService.findByUsername(jwtUser.getUsername());
+        return userService.findByUsername(jwtUser.getUsername()).orElseThrow(() ->
+                new UsernameNotFoundException("Username: " + jwtUser.getUsername() + "not found"));
     }
 }

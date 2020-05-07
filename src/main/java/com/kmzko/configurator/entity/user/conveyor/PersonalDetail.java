@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,5 +19,5 @@ import java.util.List;
 public class PersonalDetail extends AbstractDetail {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "detail_id", nullable=false)
-    private List<PersonalCharacteristic> characteristics;
+    private List<PersonalCharacteristic> characteristics = new ArrayList<>();;
 }

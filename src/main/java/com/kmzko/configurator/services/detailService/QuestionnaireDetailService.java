@@ -18,7 +18,7 @@ public class QuestionnaireDetailService implements DetailService<Questionnaire> 
     }
 
     public Questionnaire getLastRevisionQuestionnaire(ConveyorType type) {
-        return questionnaireRepo.findLatestRecord(type.getValue());
+        return questionnaireRepo.findLatestRecord(type.getValue()).get();
     }
 
     @Override

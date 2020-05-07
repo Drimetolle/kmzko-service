@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthorizationService {
     private final UserService userService;
@@ -24,21 +26,21 @@ public class AuthorizationService {
     }
 
     public AuthTokenDto generateTokenPair(String username) {
-        User user = userService.findByUsername(username);
+        Optional<User> user = userService.findByUsername(username);
 
-        if (user == null) {
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
         }
 
-        AuthTokenDto token = createTokensFromUser(user);
-        saveOrUpdateToken(user, token.getRefresh_token());
+        AuthTokenDto token = createTokensFromUser(user.get());
+        saveOrUpdateToken(user.get(), token.getRefresh_token());
 
         return token;
     }
 
     public AuthTokenDto refreshTokens(String accessToken, String refreshToken) {
         String username = jwtTokenProvider.getUsernameWithoutCheckExpired(accessToken);
-        User user = userService.findByUsername(username);
+        Optional<User> user = userService.findByUsername(username);
 
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new InvalidRefreshTokenException("Refresh token is expired");
@@ -51,8 +53,8 @@ public class AuthorizationService {
             throw new InvalidRefreshTokenException("Refresh token is invalid");
         }
 
-        AuthTokenDto token = createTokensFromUser(user);
-        saveToken(user, token.getRefresh_token());
+        AuthTokenDto token = createTokensFromUser(user.get());
+        saveToken(user.get(), token.getRefresh_token());
 
         return token;
     }

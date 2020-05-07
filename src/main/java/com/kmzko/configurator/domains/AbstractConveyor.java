@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public abstract class AbstractConveyor extends AbstractEntity {
     @NotNull
-    String name;
+    String name = "Conveyor";
 
     @NotNull
     @Enumerated(EnumType.STRING)

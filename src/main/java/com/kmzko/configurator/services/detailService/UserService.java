@@ -33,15 +33,10 @@ public class UserService implements DetailService<User> {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User findByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        else {
-            throw new UsernameNotFoundException("Username: " + username + "not found");
-        }
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
+
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);

@@ -20,19 +20,19 @@ public class PersonalQuestionnaireMapper extends AbstractMapper<PersonalQuestion
         this.rateMapper = rateMapper;
     }
 
-    @PostConstruct
-    public void setupMapper() {
-        mapper.createTypeMap(PersonalQuestionnaireDto.class, PersonalQuestionnaire.class)
-                .addMappings(m -> m.skip(PersonalQuestionnaire::setRateList)).setPostConverter(toEntityConverter());
-    }
-
-    @Override
-    void mapSpecificFields(PersonalQuestionnaireDto source, PersonalQuestionnaire destination) {
-
-        for (RateDto rate : source.getRateList()) {
-            rate.setId(null);
-        }
-
-        destination.setRateList(source.getRateList().stream().map(rateMapper::toEntity).collect(Collectors.toList()));
-    }
+//    @PostConstruct
+//    public void setupMapper() {
+//        mapper.createTypeMap(PersonalQuestionnaireDto.class, PersonalQuestionnaire.class)
+//                .addMappings(m -> m.skip(PersonalQuestionnaire::setRateList)).setPostConverter(toEntityConverter());
+//    }
+//
+//    @Override
+//    void mapSpecificFields(PersonalQuestionnaireDto source, PersonalQuestionnaire destination) {
+//
+//        for (RateDto rate : source.getRateList()) {
+//            rate.setId(null);
+//        }
+//
+//        destination.setRateList(source.getRateList().stream().map(rateMapper::toEntity).collect(Collectors.toList()));
+//    }
 }

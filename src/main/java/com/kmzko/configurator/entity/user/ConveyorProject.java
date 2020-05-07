@@ -17,12 +17,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class ConveyorProject extends AbstractEntity {
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conveyor_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "conveyorProject", cascade = CascadeType.ALL)
     private PersonalConveyor conveyor;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "questionnaire_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "conveyorProject", cascade = CascadeType.ALL)
     private PersonalQuestionnaire questionnaire;
 
     @ManyToOne

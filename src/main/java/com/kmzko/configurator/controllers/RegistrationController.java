@@ -28,7 +28,7 @@ public class RegistrationController {
     public ResponseEntity<Map<String, String>> checkFieldForUniqueness(@RequestParam Optional<String> username,
                                                            @RequestParam Optional<String> email) {
         if (username.isPresent()) {
-            if (userService.findByUsername(username.get()) != null) {
+            if (userService.findByUsername(username.get()).isPresent()) {
                 return ResponseEntity.ok(new HashMap<String, String>() {{ put("error", "username exist"); put("status", "false"); }});
             }
         }

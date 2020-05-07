@@ -47,7 +47,7 @@ public class UserServiceTest {
 
     @Before
     public void setUser() {
-        globalUser = userService.findByUsername("user");
+//        globalUser = userService.findByUsername("user");
     }
 
     @Test

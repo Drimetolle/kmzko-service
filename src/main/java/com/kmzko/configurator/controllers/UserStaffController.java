@@ -1,5 +1,6 @@
 package com.kmzko.configurator.controllers;
 
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.BioDto;
 import com.kmzko.configurator.dto.ConveyorProjectDto;
 import com.kmzko.configurator.entity.user.ConveyorProject;
@@ -16,6 +17,7 @@ import com.kmzko.configurator.services.detailService.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -65,7 +67,7 @@ public class UserStaffController {
     public ResponseEntity<BioDto> editBioUser(@Valid @RequestBody BioDto body, Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
 
-        user = userService.findByUsername(user.getUsername());
+        user = userService.findByUsername(user.getUsername()).get();
 
         user.setName(body.getName());
         user.setEmail(body.getEmail());
@@ -74,19 +76,21 @@ public class UserStaffController {
     }
 
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ConveyorProjectDto>> getUserConveyors(@RequestParam String latest, Authentication authentication) {
+    public ResponseEntity<List<ConveyorProjectDto>> getUserConveyors(Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
         return ResponseEntity.ok(userService.getAllConveyorProjects(user.getUsername()).stream()
                 .map(conveyorProjectMapper::toDto).collect(Collectors.toList()));
     }
 
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ConveyorProjectDto> getUserConveyors(Authentication authentication, ConveyorProjectDto body) {
+    public ResponseEntity<ConveyorProjectDto> getUserConveyors(@RequestParam(name = "type", defaultValue = "tape") Optional<String> rawType,
+                                                               Authentication authentication) {
+        ConveyorType type = ConveyorType.safeValueOf(rawType.get());
         User user = convertAuthenticationToUser(authentication);
-        ConveyorProject project = conveyorProjectMapper.toEntity(body);
-        project.setUser(user);
 
-        ConveyorProjectDto newBody = conveyorProjectMapper.toDto(projectDetailService.save(project));
+        ConveyorProject project = projectDetailService.createAndSaveProjectByType(type, user);
+
+        ConveyorProjectDto newBody = conveyorProjectMapper.toDto(project);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -98,7 +102,7 @@ public class UserStaffController {
                 .body(newBody);
     }
 
-    @PutMapping(value = "/questionnaires/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> changeUserQuestionnaire(@Valid @RequestBody ConveyorProjectDto body,
                                                                             @PathVariable long id, Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
@@ -116,7 +120,7 @@ public class UserStaffController {
         }
     }
 
-    @DeleteMapping(value = "/questionnaires/{id}")
+    @DeleteMapping(value = "/projects/{id}")
     public ResponseEntity<Void> deleteUserQuestionnaire(@PathVariable long id) {
         if (!projectDetailService.deleteById(id))
             return ResponseEntity.notFound().build();
@@ -125,6 +129,8 @@ public class UserStaffController {
 
     private User convertAuthenticationToUser(Authentication authentication) {
         JwtUser jwtUser =(JwtUser) authentication.getPrincipal();
-        return userService.findByUsername(jwtUser.getUsername());
+        String name = jwtUser.getUsername();
+
+        return userService.findByUsername(jwtUser.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username: " + name + "not found"));
     }
 }

@@ -1,9 +1,14 @@
 package com.kmzko.configurator.services.detailService;
 
+import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.entity.user.ConveyorProject;
+import com.kmzko.configurator.entity.user.User;
+import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
+import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.repositories.ConveyorProjectRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +16,32 @@ import java.util.Optional;
 @Service
 public class ConveyorProjectDetailService implements DetailService<ConveyorProject> {
     private final ConveyorProjectRepo projectRepo;
+    private final PersonalQuestionnaireDetailService questionnaireDetailService;
+    private final PersonalConveyorDetailService conveyorDetailService;
 
-    public ConveyorProjectDetailService(ConveyorProjectRepo projectRepo) {
+    public ConveyorProjectDetailService(ConveyorProjectRepo projectRepo, PersonalQuestionnaireDetailService questionnaireDetailService, PersonalConveyorDetailService conveyorDetailService) {
         this.projectRepo = projectRepo;
+        this.questionnaireDetailService = questionnaireDetailService;
+        this.conveyorDetailService = conveyorDetailService;
+    }
+
+    public ConveyorProject createAndSaveProjectByType(ConveyorType type, User user) {
+        ConveyorProject project = new ConveyorProject();
+        PersonalQuestionnaire questionnaire = questionnaireDetailService.createTemplateQuestionnaire(type);
+        PersonalConveyor conveyor = new PersonalConveyor();
+
+        conveyor.setType(type);
+
+        conveyor.setConveyorProject(project);
+
+        questionnaire.setConveyorProject(project);
+
+        project.setUser(user);
+        project.setConveyor(conveyor);
+        project.setQuestionnaire(questionnaire);
+        //TODO
+
+        return save(project);
     }
 
     @Override

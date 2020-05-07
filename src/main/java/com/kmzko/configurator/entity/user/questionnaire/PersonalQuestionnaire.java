@@ -21,6 +21,7 @@ public class PersonalQuestionnaire extends AbstractConveyor {
     @JoinColumn(name = "questionnaire_id", nullable=false)
     private List<PersonalRate> rateList;
 
-    @OneToOne(mappedBy = "questionnaire")
+    @OneToOne
+    @JoinColumn(name = "conveyor_project_id", referencedColumnName = "id", nullable = false)
     private ConveyorProject conveyorProject;
 }
