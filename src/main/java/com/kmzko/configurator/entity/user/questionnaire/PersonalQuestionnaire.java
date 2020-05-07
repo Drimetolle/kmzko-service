@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ import java.util.List;
 public class PersonalQuestionnaire extends AbstractConveyor {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "questionnaire_id", nullable=false)
-    private List<PersonalRate> rateList;
+    private List<PersonalRate> rateList = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "conveyor_project_id", referencedColumnName = "id", nullable = false)

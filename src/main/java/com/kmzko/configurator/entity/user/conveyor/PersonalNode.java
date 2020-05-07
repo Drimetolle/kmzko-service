@@ -1,6 +1,7 @@
 package com.kmzko.configurator.entity.user.conveyor;
 
 import com.kmzko.configurator.domains.AbstractNode;
+import com.kmzko.configurator.domains.conveyor.Detail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,13 @@ import java.util.List;
 @Getter
 @Setter
 public class PersonalNode extends AbstractNode {
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "node_id", nullable=false)
-    private List<PersonalDetail> details = new ArrayList<>();;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "personal_node_detail",
+            joinColumns = @JoinColumn(name = "personal_node_id"),
+            inverseJoinColumns = @JoinColumn(name = "detail_id")
+    )
+    private List<Detail> details = new ArrayList<>();;
 }

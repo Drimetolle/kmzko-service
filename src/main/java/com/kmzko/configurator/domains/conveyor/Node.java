@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "node")
@@ -16,7 +17,13 @@ import java.util.List;
 @Getter
 @Setter
 public class Node extends AbstractNode {
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "node_id", nullable=false)
-    private List<Detail> details;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "node_detail",
+            joinColumns = @JoinColumn(name = "node_id"),
+            inverseJoinColumns = @JoinColumn(name = "detail_id")
+    )
+    private Set<Detail> details = new HashSet<>();
 }
