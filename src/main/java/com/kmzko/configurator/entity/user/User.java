@@ -40,5 +40,5 @@ public class User extends AbstractEntity {
     private Session session;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ConveyorProject> conveyorProject = new ArrayList<>();
+    private List<ConveyorProject> conveyorProjects = new ArrayList<>();
 }

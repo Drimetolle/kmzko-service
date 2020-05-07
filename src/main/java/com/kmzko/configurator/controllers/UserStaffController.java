@@ -82,6 +82,12 @@ public class UserStaffController {
                 .map(conveyorProjectMapper::toDto).collect(Collectors.toList()));
     }
 
+    @GetMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ConveyorProjectDto> getUserConveyors(@PathVariable Long id, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+        return ResponseEntity.ok(conveyorProjectMapper.toDto(userService.getConveyorProjectById(user.getUsername(), id)));
+    }
+
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> getUserConveyors(@RequestParam(name = "type", defaultValue = "tape") Optional<String> rawType,
                                                                Authentication authentication) {

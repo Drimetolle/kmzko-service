@@ -5,6 +5,7 @@ import com.kmzko.configurator.entity.user.ConveyorProject;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
+import com.kmzko.configurator.entity.user.questionnaire.PersonalRate;
 import com.kmzko.configurator.repositories.ConveyorProjectRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ConveyorProjectDetailService implements DetailService<ConveyorProject> {
@@ -35,6 +37,7 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
         conveyor.setConveyorProject(project);
 
         questionnaire.setConveyorProject(project);
+        removeIds(questionnaire);
 
         project.setUser(user);
         project.setConveyor(conveyor);
@@ -42,6 +45,16 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
         //TODO
 
         return save(project);
+    }
+
+    private void removeIds(PersonalQuestionnaire questionnaire) {
+        questionnaire.setId(null);
+
+        List<PersonalRate> newRates = questionnaire.getRateList().stream().map(r -> {
+            r.setId(null);
+            return r;
+        }).collect(Collectors.toList());
+        questionnaire.setRateList(newRates);
     }
 
     @Override

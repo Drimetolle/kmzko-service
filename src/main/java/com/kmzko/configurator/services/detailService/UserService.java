@@ -1,8 +1,6 @@
 package com.kmzko.configurator.services.detailService;
 
 import com.kmzko.configurator.entity.user.*;
-import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
-import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.exeption.EmailExistException;
 import com.kmzko.configurator.repositories.RoleRepo;
 import com.kmzko.configurator.repositories.UserRepo;
@@ -101,7 +99,7 @@ public class UserService implements DetailService<User> {
     public List<ConveyorProject> getAllConveyorProjects(long id) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            return user.get().getConveyorProject();
+            return user.get().getConveyorProjects();
         }
         else {
             throw new UsernameNotFoundException("User not found");
@@ -111,56 +109,21 @@ public class UserService implements DetailService<User> {
     public List<ConveyorProject> getAllConveyorProjects(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            return user.get().getConveyorProject();
+            return user.get().getConveyorProjects();
         }
         else {
             throw new UsernameNotFoundException("Username: " + username + "not found");
         }
     }
 
-//    public Set<PersonalConveyor> getAllUserConveyors(long id) {
-//        Optional<User> user = userRepository.findById(id);
-//        if (user.isPresent()) {
-//            return user.get().getConveyorProject().getConveyor();
-//        }
-//        else {
-//            return new HashSet<>();
-//        }
-//    }
-//
-//    public Set<PersonalQuestionnaire> getAllUserQuestionnaires(long id) {
-//        Optional<User> user = userRepository.findById(id);
-//        if (user.isPresent()) {
-//            return user.get().getQuestionnaires();
-//        }
-//        else {
-//            return new HashSet<>();
-//        }
-//    }
-//
-//    public Set<PersonalConveyor> getAllUserConveyors(String name) {
-//        return userRepository.findByUsername(name).getConveyors();
-//    }
-//
-//    public Set<PersonalQuestionnaire> getAllUserQuestionnaires(String name) {
-//        return userRepository.findByUsername(name).getQuestionnaires();
-//    }
-//
-//    public Optional<PersonalConveyor> getUserConveyorsById(long id, String name) {
-//        Optional<PersonalConveyor> result = conveyorDetailService.getById(id);
-//        if (result.isPresent()) {
-//            return result.get().getUser().getUsername().equals(name) ? result : Optional.empty();
-//        }
-//
-//        return result;
-//    }
-//
-//    public Optional<PersonalQuestionnaire> getUserQuestionnairesById(long id, String name) {
-//        Optional<PersonalQuestionnaire> result = questionnaireDetailService.getById(id);
-//        if (result.isPresent()) {
-//            return result.get().getUser().getUsername().equals(name) ? result : Optional.empty();
-//        }
-//
-//        return result;
-//    }
+    public ConveyorProject getConveyorProjectById(String username, long id) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            Optional<ConveyorProject> project = user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
+            return project.orElse(null);
+        }
+        else {
+            throw new UsernameNotFoundException("Username: " + username + "not found");
+        }
+    }
 }
