@@ -1,8 +1,7 @@
 package com.kmzko.configurator.controllers;
 
 import com.kmzko.configurator.domains.ConveyorType;
-import com.kmzko.configurator.dto.BioDto;
-import com.kmzko.configurator.dto.ConveyorProjectDto;
+import com.kmzko.configurator.dto.*;
 import com.kmzko.configurator.entity.user.ConveyorProject;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.mappers.ConveyorProjectMapper;
@@ -85,7 +84,7 @@ public class UserStaffController {
     @GetMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> getUserConveyors(@PathVariable Long id, Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
-        return ResponseEntity.ok(conveyorProjectMapper.toDto(userService.getConveyorProjectById(user.getUsername(), id)));
+        return ResponseEntity.ok(conveyorProjectMapper.toDto(userService.getConveyorProjectById(user.getUsername(), id).get()));
     }
 
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -120,6 +119,43 @@ public class UserStaffController {
             newProject.setId(project.get().getId());
             newProject.setUser(user);
             return ResponseEntity.ok(conveyorProjectMapper.toDto(projectDetailService.save(newProject)));
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+
+    @PutMapping(value = "/projects/{id}/questionnaire", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PersonalQuestionnaireDto> putQuestionnaireInProject(@Valid @RequestBody PersonalQuestionnaireDto body,
+                                                                              @PathVariable long id, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+
+        Optional<ConveyorProject> project = userService.getConveyorProjectById(user.getUsername(), id);
+
+        if (project.isPresent()) {
+            project.get().setQuestionnaire(questionnaireMapper.toEntity(body));
+            project.get().getQuestionnaire().setConveyorProject(project.get());
+
+            ConveyorProject newProject = projectDetailService.save(project.get());
+            return ResponseEntity.ok(questionnaireMapper.toDto(newProject.getQuestionnaire()));
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @PutMapping(value = "/projects/{id}/conveyor", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PersonalConveyorDto> putConveyorInProject(@Valid @RequestBody PersonalConveyorDto body,
+                                                                      @PathVariable long id, Authentication authentication) {
+        User user = convertAuthenticationToUser(authentication);
+
+        Optional<ConveyorProject> project = userService.getConveyorProjectById(user.getUsername(), id);
+
+        if (project.isPresent()) {
+            project.get().setConveyor(conveyorMapper.toEntity(body));
+            ConveyorProject newProject = projectDetailService.save(project.get());
+            return ResponseEntity.ok(conveyorMapper.toDto(newProject.getConveyor()));
         }
         else {
             return ResponseEntity.noContent().build();

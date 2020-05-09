@@ -116,11 +116,11 @@ public class UserService implements DetailService<User> {
         }
     }
 
-    public ConveyorProject getConveyorProjectById(String username, long id) throws UsernameNotFoundException {
+    public Optional<ConveyorProject> getConveyorProjectById(String username, long id) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             Optional<ConveyorProject> project = user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
-            return project.orElse(null);
+            return project;
         }
         else {
             throw new UsernameNotFoundException("Username: " + username + "not found");
