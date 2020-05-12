@@ -31,7 +31,7 @@ public class User extends AbstractEntity {
     private String password = UUID.randomUUID().toString();
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private AccountStatus status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();

@@ -73,11 +73,6 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
     }
 
     @Override
-    public ConveyorProject update(ConveyorProject conveyorProject) {
-        return null;
-    }
-
-    @Override
     public boolean delete(ConveyorProject conveyorProject) {
         try {
             projectRepo.delete(conveyorProject);

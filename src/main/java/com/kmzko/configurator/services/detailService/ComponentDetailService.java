@@ -32,11 +32,6 @@ public class ComponentDetailService implements DetailService<Detail>  {
     }
 
     @Override
-    public Detail update(Detail detail) {
-        return null;
-    }
-
-    @Override
     public boolean delete(Detail detail) {
         try {
             repository.delete(detail);

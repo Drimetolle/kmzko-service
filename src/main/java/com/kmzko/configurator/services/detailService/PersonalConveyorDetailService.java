@@ -36,11 +36,6 @@ public class PersonalConveyorDetailService implements DetailService<PersonalConv
     }
 
     @Override
-    public PersonalConveyor update(PersonalConveyor personalConveyor) {
-        return null;
-    }
-
-    @Override
     public boolean delete(PersonalConveyor conveyor) {
         try {
             conveyorRepo.delete(conveyor);

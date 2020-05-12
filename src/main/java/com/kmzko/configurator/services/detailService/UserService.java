@@ -59,7 +59,7 @@ public class UserService implements DetailService<User> {
         Role role = roleRepository.findByName(UserRoles.ROLE_USER.toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(role));
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(AccountStatus.ACTIVE);
 
         try {
             return userRepository.save(user);
@@ -67,11 +67,6 @@ public class UserService implements DetailService<User> {
         catch (DataIntegrityViolationException e) {
             throw new EmailExistException("Email: " + user.getEmail() + " is exist");
         }
-    }
-
-    @Override
-    public User update(User user) {
-        return null;
     }
 
     @Override
@@ -119,8 +114,7 @@ public class UserService implements DetailService<User> {
     public Optional<ConveyorProject> getConveyorProjectById(String username, long id) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            Optional<ConveyorProject> project = user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
-            return project;
+            return user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
         }
         else {
             throw new UsernameNotFoundException("Username: " + username + "not found");

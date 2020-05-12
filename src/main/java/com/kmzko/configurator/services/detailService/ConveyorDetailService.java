@@ -37,11 +37,6 @@ public class ConveyorDetailService implements DetailService<Conveyor> {
     }
 
     @Override
-    public Conveyor update(Conveyor conveyor) {
-        return null;
-    }
-
-    @Override
     public boolean delete(Conveyor conveyor) {
         try {
             conveyorRepo.delete(conveyor);

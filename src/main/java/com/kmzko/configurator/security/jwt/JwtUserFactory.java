@@ -1,7 +1,7 @@
 package com.kmzko.configurator.security.jwt;
 
 import com.kmzko.configurator.entity.user.Role;
-import com.kmzko.configurator.entity.user.Status;
+import com.kmzko.configurator.entity.user.AccountStatus;
 import com.kmzko.configurator.entity.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +21,7 @@ public final class JwtUserFactory {
                 user.getName(),
                 user.getUsername(),
                 user.getPassword(),
-                user.getStatus().equals(Status.ACTIVE),
+                user.getStatus().equals(AccountStatus.ACTIVE),
                 user.getUpdated(),
                 mapGrantedAuthorities(user.getRoles()));
     }

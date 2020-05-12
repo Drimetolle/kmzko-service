@@ -37,11 +37,6 @@ public class QuestionnaireDetailService implements DetailService<Questionnaire> 
     }
 
     @Override
-    public Questionnaire update(Questionnaire questionnaire) {
-        return null;
-    }
-
-    @Override
     public boolean delete(Questionnaire questionnaire) {
         try {
             questionnaireRepo.delete(questionnaire);

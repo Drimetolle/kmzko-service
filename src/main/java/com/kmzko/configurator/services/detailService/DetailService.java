@@ -7,7 +7,6 @@ public interface DetailService<T> {
      List<T> getAll();
      Optional<T> getById(long id);
      T save(T t);
-     T update(T t);
      boolean delete(T t);
      boolean deleteById(long id);
 }
