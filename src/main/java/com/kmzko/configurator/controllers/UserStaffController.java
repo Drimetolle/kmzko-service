@@ -2,12 +2,11 @@ package com.kmzko.configurator.controllers;
 
 import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.*;
+import com.kmzko.configurator.dto.ConveyorProjectDto;
+import com.kmzko.configurator.dto.readonly.ConveyorProjectPreviewDto;
 import com.kmzko.configurator.entity.user.ConveyorProject;
 import com.kmzko.configurator.entity.user.User;
-import com.kmzko.configurator.mappers.ConveyorProjectMapper;
-import com.kmzko.configurator.mappers.PersonalConveyorMapper;
-import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
-import com.kmzko.configurator.mappers.UserBioMapper;
+import com.kmzko.configurator.mappers.*;
 import com.kmzko.configurator.security.jwt.JwtUser;
 import com.kmzko.configurator.services.detailService.ConveyorProjectDetailService;
 import com.kmzko.configurator.services.detailService.PersonalConveyorDetailService;
@@ -33,6 +32,7 @@ public class UserStaffController {
     private final PersonalQuestionnaireMapper questionnaireMapper;
     private final ConveyorProjectMapper conveyorProjectMapper;
     private final UserBioMapper userBioMapper;
+    private final ConveyorProjectViewMapper conveyorProjectViewMapper;
     private final UserService userService;
     private final PersonalConveyorDetailService personalConveyorService;
     private final PersonalQuestionnaireDetailService personalQuestionnaireService;
@@ -42,7 +42,7 @@ public class UserStaffController {
                                PersonalQuestionnaireMapper questionnaireMapper,
                                ConveyorProjectMapper conveyorProjectMapper,
                                UserBioMapper userBioMapper,
-                               UserService userService,
+                               ConveyorProjectViewMapper conveyorProjectViewMapper, UserService userService,
                                PersonalConveyorDetailService personalConveyorService,
                                PersonalQuestionnaireDetailService personalQuestionnaireService,
                                ConveyorProjectDetailService projectDetailService) {
@@ -50,6 +50,7 @@ public class UserStaffController {
         this.questionnaireMapper = questionnaireMapper;
         this.conveyorProjectMapper = conveyorProjectMapper;
         this.userBioMapper = userBioMapper;
+        this.conveyorProjectViewMapper = conveyorProjectViewMapper;
         this.userService = userService;
         this.personalConveyorService = personalConveyorService;
         this.personalQuestionnaireService = personalQuestionnaireService;
@@ -75,10 +76,10 @@ public class UserStaffController {
     }
 
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ConveyorProjectDto>> getUserConveyors(Authentication authentication) {
+    public ResponseEntity<List<ConveyorProjectPreviewDto>> getUserConveyors(Authentication authentication) {
         User user = convertAuthenticationToUser(authentication);
         return ResponseEntity.ok(userService.getAllConveyorProjects(user.getUsername()).stream()
-                .map(conveyorProjectMapper::toDto).collect(Collectors.toList()));
+                .map(conveyorProjectViewMapper::toDto).collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

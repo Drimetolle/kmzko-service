@@ -18,11 +18,9 @@ public abstract class AbstractCharacteristic extends AbstractEntity {
     @NotNull
     private String name;
 
+    @NotNull
     private String value;
 
     @NotNull
     private String mark;
-
-    @NotNull
-    private String type;
 }

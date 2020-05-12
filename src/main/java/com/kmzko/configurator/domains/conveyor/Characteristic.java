@@ -14,4 +14,5 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class Characteristic extends AbstractCharacteristic {
+
 }
