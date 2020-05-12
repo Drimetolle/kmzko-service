@@ -16,7 +16,7 @@ public class UserConverter {
     }
 
     public static User convertAuthenticationToUser(Authentication authentication) {
-        JwtUser jwtUser =(JwtUser) authentication.getPrincipal();
+        JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
         String name = jwtUser.getUsername();
 
         return userService.findByUsername(jwtUser.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username: " + name + "not found"));
