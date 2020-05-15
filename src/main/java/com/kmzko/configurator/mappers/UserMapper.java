@@ -1,6 +1,6 @@
 package com.kmzko.configurator.mappers;
 
-import com.kmzko.configurator.dto.UserDto;
+import com.kmzko.configurator.dto.user.UserDto;
 import com.kmzko.configurator.entity.user.User;
 import org.springframework.stereotype.Component;
 

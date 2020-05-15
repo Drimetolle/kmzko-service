@@ -1,5 +1,6 @@
-package com.kmzko.configurator.dto;
+package com.kmzko.configurator.dto.user;
 
+import com.kmzko.configurator.dto.AbstractDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 

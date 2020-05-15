@@ -1,13 +1,13 @@
 package com.kmzko.configurator.services;
 
 import com.kmzko.configurator.dto.auth.AuthTokenDto;
+import com.kmzko.configurator.dto.user.UserDto;
 import com.kmzko.configurator.entity.Session;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.exeption.InvalidRefreshTokenException;
 import com.kmzko.configurator.repositories.SessionRepo;
+import com.kmzko.configurator.repositories.UserRepo;
 import com.kmzko.configurator.security.jwt.JwtTokenProvider;
-import com.kmzko.configurator.services.detailService.UserService;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +15,18 @@ import java.util.Optional;
 
 @Service
 public class AuthorizationService {
-    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
     private final SessionRepo sessionRepository;
+    private final UserRepo userRepo;
 
-    public AuthorizationService(UserService userService, JwtTokenProvider jwtTokenProvider, SessionRepo sessionRepository) {
-        this.userService = userService;
+    public AuthorizationService(JwtTokenProvider jwtTokenProvider, SessionRepo sessionRepository, UserRepo userRepo) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.sessionRepository = sessionRepository;
+        this.userRepo = userRepo;
     }
 
     public AuthTokenDto generateTokenPair(String username) {
-        Optional<User> user = userService.findByUsername(username);
+        Optional<User> user = userRepo.findByUsername(username);
 
         if (!user.isPresent()) {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
@@ -40,7 +40,7 @@ public class AuthorizationService {
 
     public AuthTokenDto refreshTokens(String accessToken, String refreshToken) {
         String username = jwtTokenProvider.getUsernameWithoutCheckExpired(accessToken);
-        Optional<User> user = userService.findByUsername(username);
+        Optional<User> user = userRepo.findByUsername(username);
 
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new InvalidRefreshTokenException("Refresh token is expired");

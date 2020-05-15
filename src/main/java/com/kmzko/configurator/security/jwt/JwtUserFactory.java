@@ -1,5 +1,6 @@
 package com.kmzko.configurator.security.jwt;
 
+import com.kmzko.configurator.dto.user.UserDto;
 import com.kmzko.configurator.entity.user.Role;
 import com.kmzko.configurator.entity.user.AccountStatus;
 import com.kmzko.configurator.entity.user.User;

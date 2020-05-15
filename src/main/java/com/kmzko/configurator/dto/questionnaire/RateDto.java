@@ -1,6 +1,7 @@
-package com.kmzko.configurator.dto;
+package com.kmzko.configurator.dto.questionnaire;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.kmzko.configurator.dto.AbstractDto;
 import lombok.*;
 
 import java.util.List;

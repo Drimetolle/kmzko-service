@@ -1,40 +1,52 @@
 package com.kmzko.configurator.services.detailService;
 
 import com.kmzko.configurator.domains.conveyor.Detail;
+import com.kmzko.configurator.dto.conveyor.DetailDto;
+import com.kmzko.configurator.mappers.DetailMapper;
 import com.kmzko.configurator.repositories.DetailRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class ComponentDetailService implements DetailService<Detail>  {
+public class ComponentDetailService implements DetailService<DetailDto>  {
     private final DetailRepo repository;
+    private final DetailMapper mapper;
 
-    public ComponentDetailService(DetailRepo repository) {
+    public ComponentDetailService(DetailRepo repository, DetailMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<Detail> getAll() {
-        return repository.findAll();
+    public List<DetailDto> getAll() {
+        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Detail> getById(long id) {
-        return repository.findById(id);
+    public Optional<DetailDto> getById(long id) {
+        Optional<Detail> detail = repository.findById(id);
+
+        if (detail.isPresent()) {
+            return Optional.of(mapper.toDto(detail.get()));
+        }
+        else {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public Detail save(Detail detail) {
-        return repository.save(detail);
+    public DetailDto save(DetailDto detail) {
+        return mapper.toDto(repository.save(mapper.toEntity(detail)));
     }
 
     @Override
-    public boolean delete(Detail detail) {
+    public boolean delete(DetailDto detail) {
         try {
-            repository.delete(detail);
+            repository.delete(mapper.toEntity(detail));
         }
         catch (EmptyResultDataAccessException ex) {
             return false;

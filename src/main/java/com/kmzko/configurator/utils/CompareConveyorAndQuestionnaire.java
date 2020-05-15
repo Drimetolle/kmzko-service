@@ -1,9 +1,9 @@
 package com.kmzko.configurator.utils;
 
-import com.kmzko.configurator.domains.conveyor.Characteristic;
-import com.kmzko.configurator.domains.conveyor.Conveyor;
-import com.kmzko.configurator.domains.conveyor.Detail;
-import com.kmzko.configurator.domains.questionnaire.Rate;
+import com.kmzko.configurator.dto.conveyor.CharacteristicDto;
+import com.kmzko.configurator.dto.conveyor.ConveyorDto;
+import com.kmzko.configurator.dto.conveyor.DetailDto;
+import com.kmzko.configurator.dto.questionnaire.RateDto;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public class CompareConveyorAndQuestionnaire {
     private final float interval;
     private final Map<String, Float> rates;
 
-    public boolean proximity(Conveyor conveyor, List<Rate> rates) {
-        List<Detail> details = conveyor.getNodes().stream()
+    public boolean proximity(ConveyorDto conveyor, List<RateDto> rates) {
+        List<DetailDto> details = conveyor.getNodes().stream()
                 .flatMap(i -> i.getDetails().stream()).collect(Collectors.toList());
 
         float acc = accumulate(details, rates);
@@ -25,18 +25,18 @@ public class CompareConveyorAndQuestionnaire {
         return acc >= bound;
     }
 
-    private float accumulate(List<Detail> conveyor, List<Rate> rates) {
+    private float accumulate(List<DetailDto> conveyor, List<RateDto> rates) {
         float acc = 0;
-        for (Rate rate : rates) {
+        for (RateDto rate : rates) {
             acc += matchInInterval(conveyor, rate);
         }
         return acc;
     }
 
-    private float matchInInterval(List<Detail> details, Rate rate) {
+    private float matchInInterval(List<DetailDto> details, RateDto rate) {
         float acc = 0;
-        for (Detail detail : details) {
-            List<Characteristic> characteristics = detail.getCharacteristics().stream()
+        for (DetailDto detail : details) {
+            List<CharacteristicDto> characteristics = detail.getCharacteristics().stream()
                     .filter(i -> i.getMark().equals(rate.getMark()) && compareTwoRate(i.getValue(), rate.getValue()))
                     .collect(Collectors.toList());
 

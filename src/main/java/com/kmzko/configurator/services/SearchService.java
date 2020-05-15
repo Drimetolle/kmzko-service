@@ -1,7 +1,7 @@
 package com.kmzko.configurator.services;
 
-import com.kmzko.configurator.domains.questionnaire.Rate;
-import com.kmzko.configurator.domains.conveyor.Conveyor;
+import com.kmzko.configurator.dto.conveyor.ConveyorDto;
+import com.kmzko.configurator.dto.questionnaire.RateDto;
 import com.kmzko.configurator.repositories.ConveyorRepo;
 import com.kmzko.configurator.services.kmzko.api.AdapterAPI;
 import com.kmzko.configurator.utils.CompareConveyorAndQuestionnaire;
@@ -23,16 +23,16 @@ public class SearchService {
         this.compareConveyorAndQuestionnaire = compareConveyorAndQuestionnaire;
     }
 
-    public List<Conveyor> getNearConveyors(List<Rate> rates) {
+    public List<ConveyorDto> getNearConveyors(List<RateDto> rates) {
         return integral(rates);
     }
 
-    private List<Conveyor> integral(List<Rate> rates) {
-        return getAll().stream().filter(conv ->
-                compareConveyorAndQuestionnaire.proximity(conv, rates)).collect(Collectors.toList());
+    private List<ConveyorDto> integral(List<RateDto> rates) {
+        return getAll().stream().filter(conveyor ->
+                compareConveyorAndQuestionnaire.proximity(conveyor, rates)).collect(Collectors.toList());
     }
 
-    private List<Conveyor> getAll() {
+    private List<ConveyorDto> getAll() {
         return adapter.getNearConveyors(new ArrayList<>());
     }
 }

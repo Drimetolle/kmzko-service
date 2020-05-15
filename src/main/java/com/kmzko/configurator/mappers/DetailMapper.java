@@ -1,7 +1,7 @@
 package com.kmzko.configurator.mappers;
 
 import com.kmzko.configurator.domains.conveyor.Detail;
-import com.kmzko.configurator.dto.DetailDto;
+import com.kmzko.configurator.dto.conveyor.DetailDto;
 import org.springframework.stereotype.Component;
 
 @Component

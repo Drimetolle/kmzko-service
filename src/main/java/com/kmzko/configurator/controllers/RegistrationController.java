@@ -1,6 +1,6 @@
 package com.kmzko.configurator.controllers;
 
-import com.kmzko.configurator.dto.UserDto;
+import com.kmzko.configurator.dto.user.UserDto;
 import com.kmzko.configurator.exeption.EmailExistException;
 import com.kmzko.configurator.mappers.UserMapper;
 import com.kmzko.configurator.services.detailService.UserService;
@@ -17,11 +17,9 @@ import java.util.Optional;
 @RequestMapping("/join")
 public class RegistrationController {
     private final UserService userService;
-    private final UserMapper mapper;
 
-    public RegistrationController(UserService userService, UserMapper mapper) {
+    public RegistrationController(UserService userService) {
         this.userService = userService;
-        this.mapper = mapper;
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,7 +42,7 @@ public class RegistrationController {
     public ResponseEntity<Map<String, String>> createUser(@Valid @RequestBody UserDto user) {
         try {
             Map<String, String> response = new HashMap<>();
-            userService.save(mapper.toEntity(user));
+            userService.save(user);
 
             response.put("status", "ok");
 

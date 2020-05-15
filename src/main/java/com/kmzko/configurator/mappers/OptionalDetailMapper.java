@@ -1,7 +1,7 @@
 package com.kmzko.configurator.mappers;
 
 import com.kmzko.configurator.entity.user.conveyor.OptionalDetail;
-import com.kmzko.configurator.dto.OptionalDetailDto;
+import com.kmzko.configurator.dto.conveyor.OptionalDetailDto;
 import org.springframework.stereotype.Component;
 
 @Component

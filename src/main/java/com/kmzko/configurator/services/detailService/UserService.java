@@ -1,7 +1,11 @@
 package com.kmzko.configurator.services.detailService;
 
+import com.kmzko.configurator.dto.user.BioDto;
+import com.kmzko.configurator.dto.user.UserDto;
 import com.kmzko.configurator.entity.user.*;
 import com.kmzko.configurator.exeption.EmailExistException;
+import com.kmzko.configurator.mappers.UserBioMapper;
+import com.kmzko.configurator.mappers.UserMapper;
 import com.kmzko.configurator.repositories.RoleRepo;
 import com.kmzko.configurator.repositories.UserRepo;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,58 +15,89 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService implements DetailService<User> {
+public class UserService implements DetailService<UserDto> {
     private final UserRepo userRepository;
     private final RoleRepo roleRepository;
-    private final PersonalConveyorDetailService conveyorDetailService;
-    private final PersonalQuestionnaireDetailService questionnaireDetailService;
     private BCryptPasswordEncoder passwordEncoder;
+    private final UserMapper mapper;
+    private final UserBioMapper userBioMapper;
 
     public UserService(UserRepo userRepository, RoleRepo roleRepository,
-                       PersonalConveyorDetailService conveyorDetailService,
-                       PersonalQuestionnaireDetailService questionnaireDetailService,
-                       BCryptPasswordEncoder passwordEncoder) {
+                       BCryptPasswordEncoder passwordEncoder, UserMapper mapper, UserBioMapper userBioMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.conveyorDetailService = conveyorDetailService;
-        this.questionnaireDetailService = questionnaireDetailService;
         this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
+        this.userBioMapper = userBioMapper;
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<BioDto> updateUserInformation(BioDto bioDto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isPresent()) {
+            user.get().setName(bioDto.getName());
+            user.get().setEmail(bioDto.getEmail());
+            return Optional.of(userBioMapper.toDto(user.get()));
+        }
+        else {
+            return Optional.empty();
+        }
     }
 
+    public Optional<UserDto> findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return Optional.of(mapper.toDto(user.get()));
+        }
+        else {
+            return Optional.empty();
+        }
+    }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<UserDto> findByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return Optional.of(mapper.toDto(user.get()));
+        }
+        else {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserDto> getAll() {
+        return userRepository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<User> getById(long id) {
-        return userRepository.findById(id);
+    public Optional<UserDto> getById(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return Optional.of(mapper.toDto(user.get()));
+        }
+        else {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public User save(User user) {
+    public UserDto save(UserDto user) {
         return createNewUser(user);
     }
 
-    private User createNewUser(User user) throws EmailExistException {
+    private UserDto createNewUser(UserDto user) throws EmailExistException {
+        User newUser = mapper.toEntity(user);
         Role role = roleRepository.findByName(UserRoles.ROLE_USER.toString());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Collections.singleton(role));
-        user.setStatus(AccountStatus.ACTIVE);
+
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRoles(Collections.singleton(role));
+        newUser.setStatus(AccountStatus.ACTIVE);
 
         try {
-            return userRepository.save(user);
+            return mapper.toDto(userRepository.save(newUser));
         }
         catch (DataIntegrityViolationException e) {
             throw new EmailExistException("Email: " + user.getEmail() + " is exist");
@@ -70,9 +105,9 @@ public class UserService implements DetailService<User> {
     }
 
     @Override
-    public boolean delete(User user) {
+    public boolean delete(UserDto user) {
         try {
-            userRepository.delete(user);
+            userRepository.delete(mapper.toEntity(user));
         }
         catch (EmptyResultDataAccessException ex) {
             return false;

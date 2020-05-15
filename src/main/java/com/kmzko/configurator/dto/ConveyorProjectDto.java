@@ -1,5 +1,6 @@
 package com.kmzko.configurator.dto;
 
+import com.kmzko.configurator.dto.questionnaire.PersonalQuestionnaireDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

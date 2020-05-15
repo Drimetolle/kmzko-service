@@ -3,11 +3,10 @@ package com.kmzko.configurator.controllers;
 import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.ConveyorProjectDto;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
-import com.kmzko.configurator.dto.PersonalQuestionnaireDto;
+import com.kmzko.configurator.dto.questionnaire.PersonalQuestionnaireDto;
 import com.kmzko.configurator.dto.readonly.ConveyorProjectPreviewDto;
-import com.kmzko.configurator.entity.user.ConveyorProject;
-import com.kmzko.configurator.entity.user.User;
-import com.kmzko.configurator.mappers.*;
+import com.kmzko.configurator.mappers.ConveyorProjectMapper;
+import com.kmzko.configurator.mappers.ConveyorProjectViewMapper;
 import com.kmzko.configurator.services.detailService.ConveyorProjectDetailService;
 import com.kmzko.configurator.services.detailService.UserService;
 import org.springframework.http.MediaType;
@@ -22,24 +21,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.kmzko.configurator.utils.UserConverter.convertAuthenticationToUser;
 
 @RestController
 @RequestMapping("/api/user")
 public class ProjectsController {
-    private final PersonalConveyorMapper conveyorMapper;
-    private final PersonalQuestionnaireMapper questionnaireMapper;
     private final ConveyorProjectMapper conveyorProjectMapper;
     private final ConveyorProjectViewMapper conveyorProjectViewMapper;
     private final UserService userService;
     private final ConveyorProjectDetailService projectDetailService;
 
-    public ProjectsController(PersonalConveyorMapper conveyorMapper, PersonalQuestionnaireMapper questionnaireMapper,
-                              ConveyorProjectMapper conveyorProjectMapper,
+    public ProjectsController(ConveyorProjectMapper conveyorProjectMapper,
                               ConveyorProjectViewMapper conveyorProjectViewMapper,
                               UserService userService, ConveyorProjectDetailService projectDetailService) {
-        this.conveyorMapper = conveyorMapper;
-        this.questionnaireMapper = questionnaireMapper;
         this.conveyorProjectMapper = conveyorProjectMapper;
         this.conveyorProjectViewMapper = conveyorProjectViewMapper;
         this.userService = userService;
@@ -48,26 +41,21 @@ public class ProjectsController {
 
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ConveyorProjectPreviewDto>> getUserConveyors(Authentication authentication) {
-        User user = convertAuthenticationToUser(authentication);
-        return ResponseEntity.ok(userService.getAllConveyorProjects(user.getUsername()).stream()
+        return ResponseEntity.ok(userService.getAllConveyorProjects(authentication.getName()).stream()
                 .map(conveyorProjectViewMapper::toDto).collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> getUserConveyors(@PathVariable Long id, Authentication authentication) {
-        User user = convertAuthenticationToUser(authentication);
-        return ResponseEntity.ok(conveyorProjectMapper.toDto(userService.getConveyorProjectById(user.getUsername(), id).get()));
+        return ResponseEntity.ok(conveyorProjectMapper.toDto(userService.getConveyorProjectById(authentication.getName(), id).get()));
     }
 
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> getUserConveyors(@RequestParam(name = "type", defaultValue = "tape") Optional<String> rawType,
                                                                Authentication authentication) {
         ConveyorType type = ConveyorType.safeValueOf(rawType.get());
-        User user = convertAuthenticationToUser(authentication);
 
-        ConveyorProject project = projectDetailService.createAndSaveProjectByType(type, user);
-
-        ConveyorProjectDto newBody = conveyorProjectMapper.toDto(project);
+        ConveyorProjectDto newBody = projectDetailService.createAndSaveProjectByType(type, authentication.getName());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -82,34 +70,23 @@ public class ProjectsController {
     @PutMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> changeUserQuestionnaire(@Valid @RequestBody ConveyorProjectDto body,
                                                                       @PathVariable long id, Authentication authentication) {
-        User user = convertAuthenticationToUser(authentication);
-
-        Optional<ConveyorProject> project = projectDetailService.getById(body.getId());
+        Optional<ConveyorProjectDto> project = projectDetailService.updateById(body, id, authentication.getName());
 
         if (project.isPresent()) {
-            ConveyorProject newProject = conveyorProjectMapper.toEntity(body);
-            newProject.setId(project.get().getId());
-            newProject.setUser(user);
-            return ResponseEntity.ok(conveyorProjectMapper.toDto(projectDetailService.save(newProject)));
+            return ResponseEntity.noContent().build();
         }
         else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(project.get());
         }
     }
 
     @PutMapping(value = "/projects/{id}/questionnaire", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalQuestionnaireDto> putQuestionnaireInProject(@Valid @RequestBody PersonalQuestionnaireDto body,
                                                                               @PathVariable long id, Authentication authentication) {
-        User user = convertAuthenticationToUser(authentication);
-
-        Optional<ConveyorProject> project = userService.getConveyorProjectById(user.getUsername(), id);
+        Optional<ConveyorProjectDto> project = projectDetailService.updateQuestionnaireInProjectById(body, id, authentication.getName());
 
         if (project.isPresent()) {
-            project.get().setQuestionnaire(questionnaireMapper.toEntity(body));
-            project.get().getQuestionnaire().setConveyorProject(project.get());
-
-            ConveyorProject newProject = projectDetailService.save(project.get());
-            return ResponseEntity.ok(questionnaireMapper.toDto(newProject.getQuestionnaire()));
+            return ResponseEntity.ok(project.get().getQuestionnaire());
         }
         else {
             return ResponseEntity.noContent().build();
@@ -119,14 +96,10 @@ public class ProjectsController {
     @PutMapping(value = "/projects/{id}/conveyor", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonalConveyorDto> putConveyorInProject(@Valid @RequestBody PersonalConveyorDto body,
                                                                     @PathVariable long id, Authentication authentication) {
-        User user = convertAuthenticationToUser(authentication);
-
-        Optional<ConveyorProject> project = userService.getConveyorProjectById(user.getUsername(), id);
+        Optional<ConveyorProjectDto> project = projectDetailService.updateConveyorInProjectById(body, id, authentication.getName());
 
         if (project.isPresent()) {
-            project.get().setConveyor(conveyorMapper.toEntity(body));
-            ConveyorProject newProject = projectDetailService.save(project.get());
-            return ResponseEntity.ok(conveyorMapper.toDto(newProject.getConveyor()));
+            return ResponseEntity.ok(project.get().getConveyor());
         }
         else {
             return ResponseEntity.noContent().build();
@@ -134,7 +107,7 @@ public class ProjectsController {
     }
 
     @DeleteMapping(value = "/projects/{id}")
-    public ResponseEntity<Void> deleteUserQuestionnaire(@PathVariable long id) {
+    public ResponseEntity<Void> deleteUserQuestionnaire(@PathVariable long id, Authentication authentication) {
         if (!projectDetailService.deleteById(id))
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().build();

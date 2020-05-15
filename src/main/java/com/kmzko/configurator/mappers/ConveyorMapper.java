@@ -2,7 +2,7 @@ package com.kmzko.configurator.mappers;
 
 import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.ConveyorType;
-import com.kmzko.configurator.dto.ConveyorDto;
+import com.kmzko.configurator.dto.conveyor.ConveyorDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

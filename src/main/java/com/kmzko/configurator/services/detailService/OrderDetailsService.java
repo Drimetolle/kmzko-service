@@ -3,6 +3,7 @@ package com.kmzko.configurator.services.detailService;
 import com.kmzko.configurator.entity.orders.Order;
 import com.kmzko.configurator.entity.orders.OrderStatus;
 import com.kmzko.configurator.entity.user.ConveyorProject;
+import com.kmzko.configurator.repositories.ConveyorProjectRepo;
 import com.kmzko.configurator.repositories.OrderRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,12 @@ import java.util.stream.Collectors;
 public class OrderDetailsService {
     private final OrderRepo orderRepo;
     private final UserService userService;
-    private final ConveyorProjectDetailService conveyorProjectDetailService;
+    private final ConveyorProjectRepo conveyorProjectRepo;
 
-    public OrderDetailsService(OrderRepo orderRepo, UserService userService, ConveyorProjectDetailService conveyorProjectDetailService) {
+    public OrderDetailsService(OrderRepo orderRepo, UserService userService, ConveyorProjectRepo conveyorProjectRepo) {
         this.orderRepo = orderRepo;
         this.userService = userService;
-        this.conveyorProjectDetailService = conveyorProjectDetailService;
+        this.conveyorProjectRepo = conveyorProjectRepo;
     }
 
     public boolean deleteById(String username, long id) {
@@ -34,7 +35,7 @@ public class OrderDetailsService {
     }
 
     public List<Order> getAllUserOrders(String username) {
-        return userService.findByUsername(username).get().getConveyorProjects().stream().map(ConveyorProject::getOrder).collect(Collectors.toList());
+        return null;
     }
 
     public Optional<Order> getUserOrderById(String username, long id) {
@@ -50,7 +51,7 @@ public class OrderDetailsService {
     }
 
     public Order save(String username, Order order, long projectId) {
-        Optional<ConveyorProject> project = conveyorProjectDetailService.getById(projectId);
+        Optional<ConveyorProject> project = conveyorProjectRepo.findById(projectId);
 
         if (project.isPresent()) {
             if (project.get().getUser().getUsername().equals(username)) {

@@ -1,6 +1,9 @@
 package com.kmzko.configurator.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kmzko.configurator.dto.conveyor.NodeDto;
+import com.kmzko.configurator.dto.conveyor.OptionalDetailDto;
+import com.kmzko.configurator.dto.user.UserDto;
 import lombok.*;
 
 import java.util.List;

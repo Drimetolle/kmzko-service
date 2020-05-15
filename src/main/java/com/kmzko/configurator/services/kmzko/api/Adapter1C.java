@@ -2,11 +2,11 @@ package com.kmzko.configurator.services.kmzko.api;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kmzko.configurator.entity.user.conveyor.OptionalDetail;
 import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.domains.questionnaire.Rate;
-import com.kmzko.configurator.domains.conveyor.Conveyor;
-import com.kmzko.configurator.domains.conveyor.Detail;
+import com.kmzko.configurator.dto.conveyor.ConveyorDto;
+import com.kmzko.configurator.dto.conveyor.DetailDto;
+import com.kmzko.configurator.dto.conveyor.OptionalDetailDto;
 import com.kmzko.configurator.mappers.ConveyorMapper;
 import com.kmzko.configurator.utils.ConveyorFactory;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class Adapter1C implements AdapterAPI {
     }
 
     @Override
-    public List<Conveyor> getNearConveyors(List<Rate> rates) {
+    public List<ConveyorDto> getNearConveyors(List<Rate> rates) {
         Map<String, Object> map = rates.stream()
                 .collect(Collectors.toMap(Rate::getName, Rate::getValue));
         List<Map<String, Object>> response = api.getNearConveyors(map);
@@ -36,33 +36,33 @@ public class Adapter1C implements AdapterAPI {
     }
 
     @Override
-    public Conveyor getConveyorById(long id) {
+    public ConveyorDto getConveyorById(long id) {
         return constructConveyor(api.getConveyorById(id));
     }
 
     @Override
-    public Detail getDetailById(long id) {
+    public DetailDto getDetailById(long id) {
         return null;
     }
 
     @Override
-    public List<OptionalDetail> getOptionsByType(ConveyorType type) {
+    public List<OptionalDetailDto> getOptionsByType(ConveyorType type) {
         ObjectMapper mapper = new ObjectMapper();
         JavaType detailType = mapper.getTypeFactory().
-                constructCollectionType(List.class, OptionalDetail.class);
+                constructCollectionType(List.class, OptionalDetailDto.class);
         return mapper.convertValue(api.getOptions(), detailType);
     }
 
     @Override
-    public Object getCompatibilityDetails(List<Detail> details, Detail detail) {
+    public Object getCompatibilityDetails(List<DetailDto> details, DetailDto detail) {
         return null;
     }
 
-    private List<Conveyor> constructConveyorList(List<Map<String, Object>> rawConveyors) {
+    private List<ConveyorDto> constructConveyorList(List<Map<String, Object>> rawConveyors) {
         return rawConveyors.stream().map(this::constructConveyor).collect(Collectors.toList());
     }
 
-    private Conveyor constructConveyor(Map<String, Object> rawConveyor) {
+    private ConveyorDto constructConveyor(Map<String, Object> rawConveyor) {
         return factory.createByMap(rawConveyor);
     }
 }

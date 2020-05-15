@@ -1,5 +1,6 @@
-package com.kmzko.configurator.dto;
+package com.kmzko.configurator.dto.conveyor;
 
+import com.kmzko.configurator.dto.AbstractDto;
 import lombok.*;
 
 import java.util.List;
