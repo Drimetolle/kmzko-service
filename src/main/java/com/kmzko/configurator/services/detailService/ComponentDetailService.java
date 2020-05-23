@@ -30,12 +30,7 @@ public class ComponentDetailService implements DetailService<DetailDto>  {
     public Optional<DetailDto> getById(long id) {
         Optional<Detail> detail = repository.findById(id);
 
-        if (detail.isPresent()) {
-            return Optional.of(mapper.toDto(detail.get()));
-        }
-        else {
-            return Optional.empty();
-        }
+        return detail.map(mapper::toDto);
     }
 
     @Override

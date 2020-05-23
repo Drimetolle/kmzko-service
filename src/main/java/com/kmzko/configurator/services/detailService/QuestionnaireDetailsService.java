@@ -36,12 +36,7 @@ public class QuestionnaireDetailsService implements DetailService<QuestionnaireD
     public Optional<QuestionnaireDto> getLastRevisionQuestionnaire(ConveyorType type) {
         Optional<Questionnaire> questionnaire = questionnaireRepo.findLatestRecord(type.getValue());
 
-        if (questionnaire.isPresent()) {
-            return Optional.of(mapper.toDto(questionnaire.get()));
-        }
-        else {
-            return Optional.empty();
-        }
+        return questionnaire.map(mapper::toDto);
     }
 
     @Override
@@ -53,10 +48,7 @@ public class QuestionnaireDetailsService implements DetailService<QuestionnaireD
     public Optional<QuestionnaireDto> getById(long id) {
         Optional<Questionnaire> questionnaire = questionnaireRepo.findById(id);
 
-        if (questionnaire.isPresent()) {
-            return Optional.of(mapper.toDto(questionnaire.get()));
-        }
-        else return Optional.empty();
+        return questionnaire.map(mapper::toDto);
     }
 
     @Override

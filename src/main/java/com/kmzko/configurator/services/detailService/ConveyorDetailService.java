@@ -1,45 +1,52 @@
 package com.kmzko.configurator.services.detailService;
 
-import com.kmzko.configurator.domains.conveyor.Conveyor;
 import com.kmzko.configurator.domains.ConveyorType;
+import com.kmzko.configurator.domains.conveyor.Conveyor;
+import com.kmzko.configurator.dto.conveyor.ConveyorDto;
+import com.kmzko.configurator.mappers.ConveyorMapper;
 import com.kmzko.configurator.repositories.ConveyorRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class ConveyorDetailService implements DetailService<Conveyor> {
+public class ConveyorDetailService implements DetailService<ConveyorDto> {
     private final ConveyorRepo conveyorRepo;
+    private final ConveyorMapper mapper;
 
-    public ConveyorDetailService(ConveyorRepo conveyorRepo) {
+    public ConveyorDetailService(ConveyorRepo conveyorRepo, ConveyorMapper mapper) {
         this.conveyorRepo = conveyorRepo;
+        this.mapper = mapper;
     }
 
-    public Conveyor getConveyorTemplate(ConveyorType type) {
-        return conveyorRepo.getTemplate(type);
-    }
-
-    @Override
-    public List<Conveyor> getAll() {
-        return conveyorRepo.findAll();
+    public ConveyorDto getConveyorTemplate(ConveyorType type) {
+        return mapper.toDto(conveyorRepo.getTemplate(type));
     }
 
     @Override
-    public Optional<Conveyor> getById(long id) {
-        return conveyorRepo.findById(id);
+    public List<ConveyorDto> getAll() {
+        return conveyorRepo.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Conveyor save(Conveyor conveyor) {
-        return conveyorRepo.save(conveyor);
+    public Optional<ConveyorDto> getById(long id) {
+        Optional<Conveyor> conveyor = conveyorRepo.findById(id);
+
+        return conveyor.map(mapper::toDto);
     }
 
     @Override
-    public boolean delete(Conveyor conveyor) {
+    public ConveyorDto save(ConveyorDto conveyor) {
+        return mapper.toDto(conveyorRepo.save(mapper.toEntity(conveyor)));
+    }
+
+    @Override
+    public boolean delete(ConveyorDto conveyor) {
         try {
-            conveyorRepo.delete(conveyor);
+            conveyorRepo.delete(mapper.toEntity(conveyor));
         }
         catch (EmptyResultDataAccessException ex) {
             return false;

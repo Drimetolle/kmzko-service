@@ -18,9 +18,9 @@ import java.util.List;
 public class Unit extends AbstractEntity {
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "unit_id", nullable=false)
-    private List<Characteristic> characteristics;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "unit_id", nullable=false)
+//    private List<Characteristic> characteristics;
 }
 
 /*

@@ -47,7 +47,7 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
     }
 
     public Optional<ConveyorProjectDto> updateById(ConveyorProjectDto conveyorProject, long id, String username) {
-        Optional<ConveyorProject> project = userService.getConveyorProjectById(username, conveyorProject.getId());
+        Optional<ConveyorProject> project = userService.getConveyorProjectById(username, id);
 
         if (project.isPresent()) {
             ConveyorProject newProject = mapper.toEntity(conveyorProject);
@@ -124,12 +124,7 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
     public Optional<ConveyorProjectDto> getById(long id) {
         Optional<ConveyorProject> conveyorProject = projectRepo.findById(id);
 
-        if (conveyorProject.isPresent()) {
-            return Optional.of(mapper.toDto(conveyorProject.get()));
-        }
-        else {
-            return Optional.empty();
-        }
+        return conveyorProject.map(mapper::toDto);
     }
 
     @Override

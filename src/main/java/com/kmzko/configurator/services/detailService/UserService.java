@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,22 +51,12 @@ public class UserService implements DetailService<UserDto> {
 
     public Optional<UserDto> findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            return Optional.of(mapper.toDto(user.get()));
-        }
-        else {
-            return Optional.empty();
-        }
+        return user.map(mapper::toDto);
     }
 
     public Optional<UserDto> findByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            return Optional.of(mapper.toDto(user.get()));
-        }
-        else {
-            return Optional.empty();
-        }
+        return user.map(mapper::toDto);
     }
 
     @Override
@@ -75,12 +67,7 @@ public class UserService implements DetailService<UserDto> {
     @Override
     public Optional<UserDto> getById(long id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return Optional.of(mapper.toDto(user.get()));
-        }
-        else {
-            return Optional.empty();
-        }
+        return user.map(mapper::toDto);
     }
 
     @Override
