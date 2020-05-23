@@ -15,12 +15,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
-public class UserStaffController {
+public class UserController {
     private final UserBioMapper userBioMapper;
     private final UserService userService;
 
-    public UserStaffController(UserBioMapper userBioMapper,
-                               UserService userService) {
+    public UserController(UserBioMapper userBioMapper,
+                          UserService userService) {
         this.userBioMapper = userBioMapper;
         this.userService = userService;
     }

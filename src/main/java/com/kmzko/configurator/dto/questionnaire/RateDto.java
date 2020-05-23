@@ -1,8 +1,12 @@
 package com.kmzko.configurator.dto.questionnaire;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.kmzko.configurator.dto.AbstractDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -14,6 +18,6 @@ public class RateDto extends AbstractDto {
     private String name;
     private String value;
     private String mark;
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
     private List<PossibleRateDto> possibleRateValues;
 }

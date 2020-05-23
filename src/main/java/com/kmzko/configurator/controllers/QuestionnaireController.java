@@ -68,6 +68,20 @@ public class QuestionnaireController {
                 .body(newBody);
     }
 
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<QuestionnaireDto> deployNewQuestionnaire(@PathVariable long id, @Valid @RequestBody QuestionnaireDto body) {
+        QuestionnaireDto newBody = detailService.update(id, body);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newBody.getId())
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(newBody);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteQuestionnaire(@PathVariable long id) {
         if (!detailService.deleteById(id))

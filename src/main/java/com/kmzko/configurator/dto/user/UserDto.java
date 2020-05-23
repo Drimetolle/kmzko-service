@@ -1,5 +1,7 @@
 package com.kmzko.configurator.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.kmzko.configurator.dto.AbstractDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +22,8 @@ public class UserDto extends AbstractDto implements UserDetails {
     private String name;
     private String password;
     private String username;
+
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
     private Set<RoleDto> roles;
 
     @Override

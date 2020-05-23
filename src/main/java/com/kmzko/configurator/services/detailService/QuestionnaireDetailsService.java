@@ -22,6 +22,17 @@ public class QuestionnaireDetailsService implements DetailService<QuestionnaireD
         this.mapper = mapper;
     }
 
+    public QuestionnaireDto update(long id, QuestionnaireDto questionnaireDto) {
+        Questionnaire questionnaire = questionnaireRepo.findById(id).get();
+        Questionnaire newQuestionnaire = mapper.toEntity(questionnaireDto);
+
+        questionnaire.setName(newQuestionnaire.getName());
+        questionnaire.getRateList().clear();
+        questionnaire.getRateList().addAll(newQuestionnaire.getRateList());
+
+        return mapper.toDto(questionnaireRepo.save(newQuestionnaire));
+    }
+
     public Optional<QuestionnaireDto> getLastRevisionQuestionnaire(ConveyorType type) {
         Optional<Questionnaire> questionnaire = questionnaireRepo.findLatestRecord(type.getValue());
 

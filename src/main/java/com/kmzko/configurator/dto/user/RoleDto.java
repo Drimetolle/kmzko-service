@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 public class RoleDto extends AbstractDto implements GrantedAuthority {
     private String name;
+
     @Override
     public String getAuthority() {
         return getName();

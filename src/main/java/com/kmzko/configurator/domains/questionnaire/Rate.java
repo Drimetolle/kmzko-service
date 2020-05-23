@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,5 +17,5 @@ import java.util.List;
 public class Rate extends AbstractRate {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "rate_id", nullable=false)
-    private List<PossibleRateValue> possibleRateValues;
+    private List<PossibleRateValue> possibleRateValues = new ArrayList<>();
 }
