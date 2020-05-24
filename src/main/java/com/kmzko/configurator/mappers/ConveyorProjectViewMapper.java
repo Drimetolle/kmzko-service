@@ -26,7 +26,7 @@ public class ConveyorProjectViewMapper extends AbstractMapper<ConveyorProject, C
 
     @Override
     void mapSpecificFields(ConveyorProject source, ConveyorProjectPreviewDto destination) {
-        destination.setTitle(source.getQuestionnaire().getName());
+        destination.setTitle(source.getQuestionnaire().getQuestionnaire().getName());
         destination.setConveyor(!source.getConveyor().getNodes().isEmpty());
         destination.setQuestionnaire(!source.getQuestionnaire().getRateList().isEmpty());
     }

@@ -4,6 +4,7 @@ import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.ConveyorProjectDto;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.questionnaire.PersonalQuestionnaireDto;
+import com.kmzko.configurator.dto.questionnaire.QuestionnaireDto;
 import com.kmzko.configurator.dto.readonly.ConveyorProjectPreviewDto;
 import com.kmzko.configurator.mappers.ConveyorProjectMapper;
 import com.kmzko.configurator.mappers.ConveyorProjectViewMapper;
@@ -81,7 +82,7 @@ public class ProjectsController {
     }
 
     @PutMapping(value = "/projects/{id}/questionnaire", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonalQuestionnaireDto> putQuestionnaireInProject(@Valid @RequestBody PersonalQuestionnaireDto body,
+    public ResponseEntity<QuestionnaireDto> putQuestionnaireInProject(@Valid @RequestBody QuestionnaireDto body,
                                                                               @PathVariable long id, Authentication authentication) {
         Optional<ConveyorProjectDto> project = projectDetailService.updateQuestionnaireInProjectById(body, id, authentication.getName());
 

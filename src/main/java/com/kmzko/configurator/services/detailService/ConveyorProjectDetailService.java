@@ -1,9 +1,10 @@
 package com.kmzko.configurator.services.detailService;
 
 import com.kmzko.configurator.domains.ConveyorType;
+import com.kmzko.configurator.domains.questionnaire.Rate;
 import com.kmzko.configurator.dto.ConveyorProjectDto;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
-import com.kmzko.configurator.dto.questionnaire.PersonalQuestionnaireDto;
+import com.kmzko.configurator.dto.questionnaire.QuestionnaireDto;
 import com.kmzko.configurator.entity.user.ConveyorProject;
 import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
@@ -11,12 +12,11 @@ import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.questionnaire.PersonalRate;
 import com.kmzko.configurator.mappers.ConveyorProjectMapper;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
-import com.kmzko.configurator.mappers.PersonalQuestionnaireMapper;
+import com.kmzko.configurator.mappers.PersonalQuestionnaireToQuestionnaireDtoMapper;
 import com.kmzko.configurator.repositories.ConveyorProjectRepo;
 import com.kmzko.configurator.repositories.UserRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +28,14 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
     private final PersonalQuestionnaireDetailService questionnaireDetailService;
     private final ConveyorProjectMapper mapper;
     private final UserService userService;
-    private final PersonalQuestionnaireMapper questionnaireMapper;
+    private final PersonalQuestionnaireToQuestionnaireDtoMapper questionnaireMapper;
     private final PersonalConveyorMapper conveyorMapper;
     private final UserRepo userRepo;
 
     public ConveyorProjectDetailService(ConveyorProjectRepo projectRepo,
                                         PersonalQuestionnaireDetailService questionnaireDetailService,
                                         ConveyorProjectMapper mapper, UserService userService,
-                                        PersonalQuestionnaireMapper questionnaireMapper,
+                                        PersonalQuestionnaireToQuestionnaireDtoMapper questionnaireMapper,
                                         PersonalConveyorMapper conveyorMapper, UserRepo userRepo) {
         this.projectRepo = projectRepo;
         this.questionnaireDetailService = questionnaireDetailService;
@@ -59,16 +59,27 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
         }
     }
 
-    public Optional<ConveyorProjectDto> updateQuestionnaireInProjectById(PersonalQuestionnaireDto questionnaireDto, long id, String username) {
+    public Optional<ConveyorProjectDto> updateQuestionnaireInProjectById(QuestionnaireDto questionnaireDto, long id, String username) {
         Optional<ConveyorProject> project = userService.getConveyorProjectById(username, id);
 
         if (project.isPresent()) {
-            project.get().setQuestionnaire(questionnaireMapper.toEntity(questionnaireDto));
+            //Mutation
+            updateQuestionnaire(project.get().getQuestionnaire(), questionnaireMapper.toEntity(questionnaireDto));
+
             project.get().getQuestionnaire().setConveyorProject(project.get());
             return Optional.of(mapper.toDto(projectRepo.save(project.get())));
         }
         else {
             return Optional.empty();
+        }
+    }
+
+    private void updateQuestionnaire(PersonalQuestionnaire questionnaire, PersonalQuestionnaire newQuestionnaire) {
+        for (Rate rate : questionnaire.getQuestionnaire().getRateList()) {
+            Optional<PersonalRate> tmp = questionnaire.getRateList().stream().filter(i -> i.getRate().equals(rate)).findFirst();
+            Optional<PersonalRate> personalRate = newQuestionnaire.getRateList().stream().filter(i -> i.getId().equals(tmp.get().getId())).findFirst();
+
+            personalRate.ifPresent(value -> tmp.get().setValue(value.getValue()));
         }
     }
 
@@ -96,23 +107,12 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
         conveyor.setConveyorProject(project);
 
         questionnaire.setConveyorProject(project);
-        removeIds(questionnaire);
 
         project.setUser(user.get());
         project.setConveyor(conveyor);
         project.setQuestionnaire(questionnaire);
 
         return mapper.toDto(projectRepo.save(project));
-    }
-
-    private void removeIds(PersonalQuestionnaire questionnaire) {
-        questionnaire.setId(null);
-
-        List<PersonalRate> newRates = questionnaire.getRateList().stream().map(r -> {
-            r.setId(null);
-            return r;
-        }).collect(Collectors.toList());
-        questionnaire.setRateList(newRates);
     }
 
     @Override
