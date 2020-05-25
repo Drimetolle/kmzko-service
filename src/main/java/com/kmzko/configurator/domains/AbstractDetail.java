@@ -17,7 +17,4 @@ import javax.validation.constraints.NotNull;
 public abstract class AbstractDetail extends AbstractEntity {
     @NotNull
     private String name;
-
-    @NotNull
-    private int count;
 }

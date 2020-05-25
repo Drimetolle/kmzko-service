@@ -11,6 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class DetailDto extends AbstractDto {
     private String name;
-    private int count;
     private List<CharacteristicDto> characteristics;
 }
