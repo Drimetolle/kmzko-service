@@ -68,7 +68,7 @@ public class QuestionnaireController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionnaireDto> deployNewQuestionnaire(@PathVariable long id, @Valid @RequestBody QuestionnaireDto body) {
+    public ResponseEntity<QuestionnaireDto> updateQuestionnaire(@PathVariable long id, @Valid @RequestBody QuestionnaireDto body) {
         QuestionnaireDto newBody = detailService.update(id, body);
 
         URI location = ServletUriComponentsBuilder

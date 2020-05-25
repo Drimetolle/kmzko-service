@@ -10,6 +10,7 @@ import com.kmzko.configurator.entity.user.User;
 import com.kmzko.configurator.entity.user.conveyor.PersonalConveyor;
 import com.kmzko.configurator.entity.user.questionnaire.PersonalQuestionnaire;
 import com.kmzko.configurator.entity.user.questionnaire.PersonalRate;
+import com.kmzko.configurator.exeption.AccessDeniedException;
 import com.kmzko.configurator.mappers.ConveyorProjectMapper;
 import com.kmzko.configurator.mappers.PersonalConveyorMapper;
 import com.kmzko.configurator.mappers.PersonalQuestionnaireToQuestionnaireDtoMapper;
@@ -18,12 +19,10 @@ import com.kmzko.configurator.repositories.UserRepo;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class ConveyorProjectDetailService implements DetailService<ConveyorProjectDto> {
+public class ConveyorProjectDetailService {
     private final ConveyorProjectRepo projectRepo;
     private final PersonalQuestionnaireDetailService questionnaireDetailService;
     private final ConveyorProjectMapper mapper;
@@ -115,38 +114,33 @@ public class ConveyorProjectDetailService implements DetailService<ConveyorProje
         return mapper.toDto(projectRepo.save(project));
     }
 
-    @Override
-    public List<ConveyorProjectDto> getAll() {
-        return projectRepo.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<ConveyorProjectDto> getById(long id) {
+    public Optional<ConveyorProjectDto> getById(String username, long id) throws AccessDeniedException {
         Optional<ConveyorProject> conveyorProject = projectRepo.findById(id);
+
+        if (conveyorProject.isPresent()) {
+            if (conveyorProject.get().getUser().getUsername().equals(username)) {
+                projectRepo.deleteById(id);
+            }
+            else {
+                throw new AccessDeniedException("You don't have permission for get");
+            }
+        }
 
         return conveyorProject.map(mapper::toDto);
     }
 
-    @Override
-    public ConveyorProjectDto save(ConveyorProjectDto conveyorProject) {
-        return mapper.toDto(projectRepo.save(mapper.toEntity(conveyorProject)));
-    }
-
-    @Override
-    public boolean delete(ConveyorProjectDto conveyorProject) {
+    public boolean deleteById(String username, long id) throws AccessDeniedException {
         try {
-            projectRepo.delete(mapper.toEntity(conveyorProject));
-        }
-        catch (EmptyResultDataAccessException ex) {
-            return false;
-        }
-        return true;
-    }
+            Optional<ConveyorProject> project = projectRepo.findById(id);
 
-    @Override
-    public boolean deleteById(long id) {
-        try {
-            projectRepo.deleteById(id);
+            if (project.isPresent()) {
+                if (project.get().getUser().getUsername().equals(username)) {
+                    projectRepo.deleteById(id);
+                }
+                else {
+                    throw new AccessDeniedException("You don't have permission for delete");
+                }
+            }
         }
         catch (EmptyResultDataAccessException ex) {
             return false;

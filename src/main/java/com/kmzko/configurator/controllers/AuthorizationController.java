@@ -39,7 +39,7 @@ public class AuthorizationController {
     }
 
     @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthTokenDto> login(@RequestBody AuthTokenDto bodyAuth) {
+    public ResponseEntity<AuthTokenDto> refresh(@RequestBody AuthTokenDto bodyAuth) {
         try {
             AuthTokenDto tokens = authorizationService.refreshTokens(bodyAuth.getAccess_token(), bodyAuth.getRefresh_token());
             return ResponseEntity.ok(tokens);

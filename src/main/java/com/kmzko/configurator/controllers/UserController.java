@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> getUser(Authentication authentication) {
+    public ResponseEntity<UserDto> getUserBio(Authentication authentication) {
         Optional<UserDto> user = userService.findByUsername(authentication.getName());
         return ResponseEntity.ok(user.get());
     }

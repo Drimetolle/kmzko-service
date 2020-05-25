@@ -29,7 +29,7 @@ public class DetailController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DetailDto> deployNewDetail(@PathVariable Long id) {
+    public ResponseEntity<DetailDto> deleteDetail(@PathVariable Long id) {
         if (!service.deleteById(id))
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().build();
