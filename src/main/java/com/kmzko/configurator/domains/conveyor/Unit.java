@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "unit")
@@ -17,10 +17,6 @@ import java.util.List;
 @Setter
 public class Unit extends AbstractEntity {
     private String name;
-
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "unit_id", nullable=false)
-//    private List<Characteristic> characteristics;
 }
 
 /*
