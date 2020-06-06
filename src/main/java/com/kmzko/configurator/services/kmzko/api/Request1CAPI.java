@@ -23,11 +23,11 @@ public class Request1CAPI {
         return map;
     }
 
-    public List<Object> getOptions() {
+    public List<Map<String, Object>> getOptions() {
         String json = "[{\"id\":0,\"name\":\"Конвейерная лента\",\"characteristics\":[{\"id\":0,\"name\":\"Ширина ленты\",\"value\":\"2\",\"mark\":\"tape-width\",\"unit\":{\"name\":\"meter\"}},{\"id\":0,\"name\":\"Длина ленты\",\"value\":\"50\",\"mark\":\"tape-length\",\"unit\":{\"name\":\"meter\"}}]}]";
 
         ObjectMapper mapper = new ObjectMapper();
-        List<Object> map = new ArrayList<>();
+        List<Map<String, Object>> map = new ArrayList<>();
         try {
             map = mapper.readValue(json, List.class);
         } catch (JsonProcessingException e) {

@@ -49,7 +49,7 @@ public class QuestionnaireController {
             return ResponseEntity.ok(Collections.singletonList(questionnaire.get()));
         }
         else {
-            return ResponseEntity.ok(detailService.getAll());
+            return ResponseEntity.badRequest().build();
         }
     }
 

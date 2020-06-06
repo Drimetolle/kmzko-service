@@ -3,12 +3,15 @@ package com.kmzko.configurator.controllers;
 import com.kmzko.configurator.domains.ConveyorType;
 import com.kmzko.configurator.dto.conveyor.OptionalDetailDto;
 import com.kmzko.configurator.services.KmzkoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/options")
@@ -19,14 +22,15 @@ public class OptionalDetailController {
         this.service = service;
     }
 
-    @GetMapping(value = "/{rawType}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<OptionalDetailDto>> getOptions(@PathVariable String rawType) {
-        ConveyorType type = ConveyorType.safeValueOf(rawType);
-
-        if (type == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<OptionalDetailDto>> getOptions(@RequestParam(name = "type") Optional<String> rawType) {
+        ConveyorType type;
+        if (rawType.isPresent()) {
+            type = ConveyorType.safeValueOf(rawType.get());
+            return ResponseEntity.ok(service.getOptions(type));
         }
-
-        return ResponseEntity.ok(service.getOptions(type));
+        else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
