@@ -5,8 +5,6 @@ import com.kmzko.configurator.dto.ConveyorProjectDto;
 import com.kmzko.configurator.dto.PersonalConveyorDto;
 import com.kmzko.configurator.dto.questionnaire.QuestionnaireDto;
 import com.kmzko.configurator.dto.readonly.ConveyorProjectPreviewDto;
-import com.kmzko.configurator.mappers.ConveyorProjectMapper;
-import com.kmzko.configurator.mappers.ConveyorProjectViewMapper;
 import com.kmzko.configurator.services.detailService.ConveyorProjectDetailService;
 import com.kmzko.configurator.services.detailService.UserService;
 import org.springframework.http.MediaType;
@@ -19,35 +17,31 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @RestController
 @RequestMapping("/api/user")
 public class ProjectsController {
-    private final ConveyorProjectMapper conveyorProjectMapper;
-    private final ConveyorProjectViewMapper conveyorProjectViewMapper;
     private final UserService userService;
     private final ConveyorProjectDetailService projectDetailService;
 
-    public ProjectsController(ConveyorProjectMapper conveyorProjectMapper,
-                              ConveyorProjectViewMapper conveyorProjectViewMapper,
-                              UserService userService, ConveyorProjectDetailService projectDetailService) {
-        this.conveyorProjectMapper = conveyorProjectMapper;
-        this.conveyorProjectViewMapper = conveyorProjectViewMapper;
+    public ProjectsController(UserService userService, ConveyorProjectDetailService projectDetailService) {
         this.userService = userService;
         this.projectDetailService = projectDetailService;
     }
 
     @GetMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ConveyorProjectPreviewDto>> getUserConveyors(Authentication authentication) {
-        return ResponseEntity.ok(userService.getAllConveyorProjects(authentication.getName()).stream()
-                .map(conveyorProjectViewMapper::toDto).collect(Collectors.toList()));
+        return ResponseEntity.ok(userService.getAllConveyorProjectsPreview(authentication.getName()));
     }
 
     @GetMapping(value = "/projects/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConveyorProjectDto> getUserConveyors(@PathVariable Long id, Authentication authentication) {
-        return ResponseEntity.ok(conveyorProjectMapper.toDto(userService.getConveyorProjectById(authentication.getName(), id).get()));
+        Optional<ConveyorProjectDto> project = userService.getConveyorProjectById(authentication.getName(), id);
+        if(project.isPresent()) {
+            return ResponseEntity.ok(project.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,10 +67,10 @@ public class ProjectsController {
         Optional<ConveyorProjectDto> project = projectDetailService.updateById(body, id, authentication.getName());
 
         if (project.isPresent()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(project.get());
         }
         else {
-            return ResponseEntity.ok(project.get());
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -89,7 +83,7 @@ public class ProjectsController {
             return ResponseEntity.ok(project.get().getQuestionnaire());
         }
         else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -102,7 +96,7 @@ public class ProjectsController {
             return ResponseEntity.ok(project.get().getConveyor());
         }
         else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
     }
 

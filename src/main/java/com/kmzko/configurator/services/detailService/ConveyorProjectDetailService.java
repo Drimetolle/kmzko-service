@@ -46,7 +46,7 @@ public class ConveyorProjectDetailService {
     }
 
     public Optional<ConveyorProjectDto> updateById(ConveyorProjectDto conveyorProject, long id, String username) {
-        Optional<ConveyorProject> project = userService.getConveyorProjectById(username, id);
+        Optional<ConveyorProject> project = userService.getConveyorProjectEntityById(username, id);
 
         if (project.isPresent()) {
             ConveyorProject newProject = mapper.toEntity(conveyorProject);
@@ -59,7 +59,7 @@ public class ConveyorProjectDetailService {
     }
 
     public Optional<ConveyorProjectDto> updateQuestionnaireInProjectById(QuestionnaireDto questionnaireDto, long id, String username) {
-        Optional<ConveyorProject> project = userService.getConveyorProjectById(username, id);
+        Optional<ConveyorProject> project = userService.getConveyorProjectEntityById(username, id);
 
         if (project.isPresent()) {
             //Mutation
@@ -83,7 +83,7 @@ public class ConveyorProjectDetailService {
     }
 
     public Optional<ConveyorProjectDto> updateConveyorInProjectById(PersonalConveyorDto personalConveyorDto, long id, String username) {
-        Optional<ConveyorProject> project = userService.getConveyorProjectById(username, id);
+        Optional<ConveyorProject> project = userService.getConveyorProjectEntityById(username, id);
 
         if (project.isPresent()) {
             project.get().setConveyor(conveyorMapper.toEntity(personalConveyorDto));

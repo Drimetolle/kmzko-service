@@ -1,9 +1,13 @@
 package com.kmzko.configurator.services.detailService;
 
+import com.kmzko.configurator.dto.ConveyorProjectDto;
+import com.kmzko.configurator.dto.readonly.ConveyorProjectPreviewDto;
 import com.kmzko.configurator.dto.user.BioDto;
 import com.kmzko.configurator.dto.user.UserDto;
 import com.kmzko.configurator.entity.user.*;
 import com.kmzko.configurator.exeption.EmailExistException;
+import com.kmzko.configurator.mappers.ConveyorProjectMapper;
+import com.kmzko.configurator.mappers.ConveyorProjectViewMapper;
 import com.kmzko.configurator.mappers.UserBioMapper;
 import com.kmzko.configurator.mappers.UserMapper;
 import com.kmzko.configurator.repositories.RoleRepo;
@@ -26,14 +30,19 @@ public class UserService implements DetailService<UserDto> {
     private BCryptPasswordEncoder passwordEncoder;
     private final UserMapper mapper;
     private final UserBioMapper userBioMapper;
+    private final ConveyorProjectMapper conveyorProjectMapper;
+    private final ConveyorProjectViewMapper conveyorProjectViewMapper;
 
     public UserService(UserRepo userRepository, RoleRepo roleRepository,
-                       BCryptPasswordEncoder passwordEncoder, UserMapper mapper, UserBioMapper userBioMapper) {
+                       BCryptPasswordEncoder passwordEncoder, UserMapper mapper, UserBioMapper userBioMapper,
+                       ConveyorProjectMapper conveyorProjectMapper, ConveyorProjectViewMapper conveyorProjectViewMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
         this.userBioMapper = userBioMapper;
+        this.conveyorProjectMapper = conveyorProjectMapper;
+        this.conveyorProjectViewMapper = conveyorProjectViewMapper;
     }
 
     public Optional<BioDto> updateUserInformation(BioDto bioDto, String username) {
@@ -113,30 +122,52 @@ public class UserService implements DetailService<UserDto> {
         return true;
     }
 
-    public List<ConveyorProject> getAllConveyorProjects(long id) throws UsernameNotFoundException {
+    public List<ConveyorProjectDto> getAllConveyorProjects(long id) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            return user.get().getConveyorProjects();
+            return user.get().getConveyorProjects().stream().map(conveyorProjectMapper::toDto).collect(Collectors.toList());
         }
         else {
             throw new UsernameNotFoundException("User not found");
         }
     }
 
-    public List<ConveyorProject> getAllConveyorProjects(String username) throws UsernameNotFoundException {
+    public List<ConveyorProjectDto> getAllConveyorProjects(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            return user.get().getConveyorProjects();
+            return user.get().getConveyorProjects().stream().map(conveyorProjectMapper::toDto).collect(Collectors.toList());
         }
         else {
             throw new UsernameNotFoundException("Username: " + username + "not found");
         }
     }
 
-    public Optional<ConveyorProject> getConveyorProjectById(String username, long id) throws UsernameNotFoundException {
+    public List<ConveyorProjectPreviewDto> getAllConveyorProjectsPreview(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            return user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
+            return user.get().getConveyorProjects().stream().map(conveyorProjectViewMapper::toDto).collect(Collectors.toList());
+        }
+        else {
+            throw new UsernameNotFoundException("Username: " + username + "not found");
+        }
+    }
+
+    public Optional<ConveyorProjectDto> getConveyorProjectById(String username, long id) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            Optional<ConveyorProject> project = user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
+            return project.map(conveyorProjectMapper::toDto);
+        }
+        else {
+            throw new UsernameNotFoundException("Username: " + username + "not found");
+        }
+    }
+
+     Optional<ConveyorProject> getConveyorProjectEntityById(String username, long id) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            Optional<ConveyorProject> project = user.get().getConveyorProjects().stream().filter(v -> v.getId().equals(id)).findFirst();
+            return project;
         }
         else {
             throw new UsernameNotFoundException("Username: " + username + "not found");
